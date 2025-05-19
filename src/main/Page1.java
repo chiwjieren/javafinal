@@ -16,7 +16,7 @@ public class Page1 implements ActionListener {
     public Page1() {
         x = new JFrame();
         x.setSize(300,100);
-        x.setLocation(1000, 200);
+        x.setLocation(500, 200);
 
         register = new Button("Register");
         login = new Button("Login");
@@ -91,7 +91,7 @@ public class Page1 implements ActionListener {
                 data.add(id);
                 data.add(password);
 
-                int role = id.charAt(0);
+                char role = id.charAt(0);
                 boolean loginSuccess;
 
                 switch (role) {
@@ -114,6 +114,19 @@ public class Page1 implements ActionListener {
 
                 if (loginSuccess) {
                     JOptionPane.showMessageDialog(x, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    x.setVisible(false);
+
+                    if (role == 'A') {
+                        Main.adminPage = new AdminPage();
+                    }
+
+                    else if (role == 'C') {
+                        // Main.customerPage = new customerPage();
+                    }
+
+                    else {
+                        // Main.salesmanPage = new salesmanPage();
+                    }
                 } 
                 
                 else {
