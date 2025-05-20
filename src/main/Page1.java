@@ -10,13 +10,13 @@ import javax.swing.JOptionPane;
 
 public class Page1 implements ActionListener {
 
-    JFrame x;
+    JFrame jframe;
     Button register, login, exit;
 
     public Page1() {
-        x = new JFrame();
-        x.setSize(300,100);
-        x.setLocation(500, 200);
+        jframe = new JFrame();
+        jframe.setSize(300,100);
+        jframe.setLocation(500, 200);
 
         register = new Button("Register");
         login = new Button("Login");
@@ -26,11 +26,11 @@ public class Page1 implements ActionListener {
         login.addActionListener(this);
         exit.addActionListener(this);
 
-        x.setLayout(new FlowLayout());
-        x.add(register);
-        x.add(login);
-        x.add(exit);
-        x.setVisible(true);
+        jframe.setLayout(new FlowLayout());
+        jframe.add(register);
+        jframe.add(login);
+        jframe.add(exit);
+        jframe.setVisible(true);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class Page1 implements ActionListener {
 
                 Customer.register("customer.txt", newUser);
 
-                JOptionPane.showMessageDialog(x,
+                JOptionPane.showMessageDialog(jframe,
                     "Registration Successful!\nYour Customer ID is " + id,
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE
@@ -62,7 +62,7 @@ public class Page1 implements ActionListener {
             catch (IllegalArgumentException ex) {
                 
                 JOptionPane.showMessageDialog(
-                    x,
+                    jframe,
                     "Please don’t use commas, quotes, line breaks or leave blanks in your username/password.",
                     "Invalid Input",
                     JOptionPane.ERROR_MESSAGE
@@ -73,7 +73,7 @@ public class Page1 implements ActionListener {
 
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(
-                    x,
+                    jframe,
                     "Could not save registration. Please try again.",
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE
@@ -114,8 +114,8 @@ public class Page1 implements ActionListener {
                 }
 
                 if (loginSuccess) {
-                    JOptionPane.showMessageDialog(x, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
-                    x.setVisible(false);
+                    JOptionPane.showMessageDialog(jframe, "Login successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                    jframe.setVisible(false);
 
                     if (role == 'A') {
                         Main.adminPage = new AdminPage();
@@ -131,14 +131,14 @@ public class Page1 implements ActionListener {
                 } 
                 
                 else {
-                    JOptionPane.showMessageDialog(x, "Invalid ID or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(jframe, "Invalid ID or password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
                 }
 
             } 
 
             catch (IOException ex) {
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(x, "Login error occurred.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(jframe, "Login error occurred.", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
         }

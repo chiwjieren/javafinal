@@ -6,15 +6,15 @@ import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 
 public class AdminPage implements ActionListener{
-    JFrame x;
+    JFrame jframe;
     Button mngSalesman, mngCustomer, mngCar, paymentAnalysis, feedbackAnalysis, report, logout;
 
     public static AdminManageSalesman manageSalesman;
 
     public AdminPage() {
-        x = new JFrame();
-        x.setSize(500,500);
-        x.setLocation(500,200);
+        jframe = new JFrame();
+        jframe.setSize(500,500);
+        jframe.setLocation(500,200);
 
         mngSalesman = new Button("All Salesmans");
         mngCustomer = new Button("All Customers");
@@ -32,21 +32,21 @@ public class AdminPage implements ActionListener{
         report.addActionListener(this);
         logout.addActionListener(this);
 
-        x.setLayout(new GridLayout(7,1,5,5));
-        x.add(mngSalesman);
-        x.add(mngCustomer);
-        x.add(mngCar);
-        x.add(paymentAnalysis);
-        x.add(feedbackAnalysis);    
-        x.add(report);
-        x.add(logout);
+        jframe.setLayout(new GridLayout(7,1,5,5));
+        jframe.add(mngSalesman);
+        jframe.add(mngCustomer);
+        jframe.add(mngCar);
+        jframe.add(paymentAnalysis);
+        jframe.add(feedbackAnalysis);    
+        jframe.add(report);
+        jframe.add(logout);
 
-        x.setVisible(true);
+        jframe.setVisible(true);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        x.setVisible(false);
+        jframe.setVisible(false);
 
         if (e.getSource() == mngSalesman) {
             manageSalesman = new AdminManageSalesman(this);
