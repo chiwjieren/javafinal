@@ -122,7 +122,7 @@ public class Page1 implements ActionListener {
                     }
 
                     else if (role == 'C') {
-                        // Main.customerPage = new customerPage();
+                        Main.customerPage = new CustomerPage();
                     }
 
                     else {
