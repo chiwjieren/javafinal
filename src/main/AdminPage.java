@@ -12,9 +12,9 @@ public class AdminPage implements ActionListener{
     public static AdminManageSalesman manageSalesman;
 
     public AdminPage() {
-        jframe = new JFrame();
+        jframe = new JFrame("Admin Page");
         jframe.setSize(500,500);
-        jframe.setLocation(500,200);
+        jframe.setLocation(400,100);
 
         mngSalesman = new Button("All Salesmans");
         mngCustomer = new Button("All Customers");

@@ -40,22 +40,6 @@ public class Customer extends User {
         return String.format("C%04d", num + 1);
     }
 
-    public static void register(String filename, ArrayList<String> data) throws IOException {
-        try (PrintWriter pw = new PrintWriter(new FileWriter(filename, true))) {
-            
-            String id = data.get(0);
-            String username = data.get(1);
-            String password = data.get(2);
-
-            if (!cleanInput(id) || !cleanInput(username) || !cleanInput(password)) {
-                throw new IllegalArgumentException("Invalid Input!");
-            }   
-
-            pw.println();
-            pw.print(id + "," + username + "," + password);
-        }         
-    }
-
     public static boolean login(String filename, ArrayList<String> data) throws IOException {
         String id = data.get(0);
         String password = data.get(1);

@@ -14,7 +14,7 @@ public class Page1 implements ActionListener {
     Button register, login, exit;
 
     public Page1() {
-        jframe = new JFrame();
+        jframe = new JFrame("APU Car Sales System");
         jframe.setSize(300,100);
         jframe.setLocation(500, 200);
 
