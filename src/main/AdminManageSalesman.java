@@ -162,7 +162,7 @@ public class AdminManageSalesman implements ActionListener{
         }
         
         if (e.getSource() == search) {
-
+            
         }
 
         if (e.getSource() == update) {
@@ -223,7 +223,8 @@ public class AdminManageSalesman implements ActionListener{
         }
 
         if (e.getSource() == back) {
-
+            jframe.dispose();
+            adminPage.jframe.setVisible(true);
         }
     }
 }
