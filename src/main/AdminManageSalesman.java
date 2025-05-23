@@ -151,7 +151,7 @@ public class AdminManageSalesman implements ActionListener{
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(
                     jframe,
-                    "Could not save registration. Please try again.",
+                    "Failed to delete. Please try again.",
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE
                 );
@@ -166,12 +166,64 @@ public class AdminManageSalesman implements ActionListener{
         }
 
         if (e.getSource() == update) {
+            String id = JOptionPane.showInputDialog(jframe, "Enter Salesman ID to update:");
+            if (id == null || id.isBlank()) return;
 
+            Salesman existing = Salesman.searchSalesman("salesman.txt", id);
+
+            if (existing == null) {
+                JOptionPane.showMessageDialog(jframe,
+                    "No record found for ID " + id,
+                    "Not Found",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String newUser = JOptionPane.showInputDialog(
+                jframe,
+                "New username:",
+                existing.getUsername()
+            );
+
+            if (newUser == null || newUser.isBlank()) return;
+
+            String newPass = JOptionPane.showInputDialog(
+                jframe,
+                "New password:",
+                existing.getPassword()
+            );
+
+            if (newPass == null || newPass.isBlank()) return;
+
+            try {
+                boolean ok = Salesman.update("salesman.txt", id, newUser, newPass);
+                if (ok) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Successfully updated " + id,
+                        "Updated",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    refreshTable();
+                } 
+                
+                else {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Update failed; ID not found.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+            } 
+            
+            catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(jframe,
+                    "I/O error: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
         }
 
         if (e.getSource() == back) {
 
         }
     }
-    
 }

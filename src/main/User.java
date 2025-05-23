@@ -1,4 +1,6 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -81,4 +83,60 @@ public class User {
         }
 
         return deleted;
-    }}
+    }
+
+    public static boolean update(String filename, String idToUpdate, String newUsername, String newPassword) throws IOException {
+        File inputFile = new File(filename);
+        if (!inputFile.exists()) return false;
+
+        File tempFile  = new File(inputFile.getParent(), "salesman.tmp");
+
+        boolean updated = false;
+        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+
+                if (line.trim().isEmpty()) {
+                    writer.write(line);
+                    writer.newLine();
+                    continue;
+                }
+
+                String[] fields = line.split(",", 3);
+                if (fields.length < 3) {
+                    writer.write(line);
+                }
+
+                else if (fields[0].equals(idToUpdate)) {
+                    if (!cleanInput(idToUpdate) || !cleanInput(newUsername) || !cleanInput(newPassword)) {
+                        throw new IllegalArgumentException("Invalid Input!");
+                    }
+
+                    String newLine = String.join(",", idToUpdate, newUsername, newPassword);
+                    writer.write(newLine);
+                    updated = true;
+                } 
+                
+                else {
+                    writer.write(line);
+                }
+
+                writer.newLine();
+            }
+        }
+
+        if (updated) {
+            if (!inputFile.delete() || !tempFile.renameTo(inputFile)) {
+                throw new IOException("Could not replace original file.");
+            }
+        } 
+        
+        else {
+            tempFile.delete();
+        }
+
+        return updated;
+    }
+}
