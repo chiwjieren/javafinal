@@ -7,14 +7,16 @@ import javax.swing.JFrame;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button viewAvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout;
+    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout;
+
+    public static CustomerViewAvailableCars viewAvailableCars;
 
     public CustomerPage() {
         jframe = new JFrame();
         jframe.setSize(500,500);
         jframe.setLocation(500,200);
 
-        viewAvailableCars = new Button("View Available Cars");
+        AvailableCars = new Button("View Available Cars");
         AffordableCars = new Button("Affordable Cars");
         LocalCars = new Button("Local Cars");
         LuxuryCars = new Button("Luxury Cars");
@@ -22,7 +24,7 @@ public class CustomerPage implements ActionListener {
         History = new Button("History");
         Logout = new Button("Logout");
 
-        viewAvailableCars.addActionListener(this);
+        AvailableCars.addActionListener(this);
         AffordableCars.addActionListener(this);
         LocalCars.addActionListener(this);
         LuxuryCars.addActionListener(this);
@@ -31,7 +33,7 @@ public class CustomerPage implements ActionListener {
         Logout.addActionListener(this);
 
         jframe.setLayout(new GridLayout(6,1,5,5));
-        jframe.add(viewAvailableCars);
+        jframe.add(AvailableCars);
         jframe.add(AffordableCars);
         jframe.add(LocalCars);
         jframe.add(LuxuryCars);
@@ -46,29 +48,29 @@ public class CustomerPage implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         jframe.setVisible(false);
 
-        if (e.getSource() == viewAvailableCars) {
-            //viewAvailableCars = new ViewAvailableCars(this);
+        if (e.getSource() == AvailableCars) {
+            viewAvailableCars = new CustomerViewAvailableCars(this);
         }    
 
         else if (e.getSource() == AffordableCars) {
-            //AffordableCars = new AffordableCars(this);
+            //ViewAffordableCars = new CustomerAffordableCars(this);
 
         }
 
         else if (e.getSource() == LocalCars) {
-            //LocalCars = new LocalCars(this);
+            //ViewLocalCars = new CustomerLocalCars(this);
         }
         
         else if (e.getSource() == LuxuryCars) {
-            //LuxuryCars = new LuxuryCars(this);
+            //ViewLuxuryCars = new CustomerLuxuryCars(this);
         }
 
         else if (e.getSource() == FindCar) {
-            //FindCar = new FindCar(this);
+            //FindCarFilter = new CustomerFindCar(this);
         }
         
         else if (e.getSource() == History) {
-            //History = new History(this);
+            //ViewHistory = new CustomerHistory(this);
         }
 
         else if (e.getSource() == Logout) {

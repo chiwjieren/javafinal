@@ -1,0 +1,20 @@
+CAR001,Alphard,RM450000,MPV,Toyota,Luxury
+CAR002,Vios,RM85000,Sedan,Toyota,Affordable
+CAR003,Teana,RM120000,Sedan,Nissan,Affordable
+CAR004,Axia,RM41000,Hatchback,Perodua,Affordable
+CAR005,Camry,RM210000,Sedan,Toyota,Luxury
+CAR006,X5,RM430000,SUV,BMW,Luxury
+CAR007,Civic,RM125000,Sedan,Honda,Affordable
+CAR008,Myvi,RM58000,Hatchback,Perodua,Affordable
+CAR009,X50,RM95000,SUV,Proton,Affordable
+CAR010,X70,RM125000,SUV,Proton,Affordable
+CAR011,Model 3,RM250000,Sedan,Tesla,Luxury
+CAR012,Tucson,RM135000,SUV,Hyundai,Affordable
+CAR013,City,RM98000,Sedan,Honda,Affordable
+CAR014,C-Class,RM320000,Sedan,Mercedes-Benz,Luxury
+CAR015,A6,RM350000,Sedan,Audi,Luxury
+CAR016,Corolla Altis,RM135000,Sedan,Toyota,Affordable
+CAR017,Triton,RM125000,Pickup,Mitsubishi,Affordable
+CAR018,Ranger,RM148000,Pickup,Ford,Affordable
+CAR019,Persona,RM70000,Sedan,Proton,Affordable
+CAR020,Ioniq 5,RM270000,Crossover,Hyundai,Luxury
