@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,7 +23,7 @@ public class User {
     }
 
     
-    protected static boolean cleanInput(String input) {
+    public static boolean cleanInput(String input) {
         if (input.trim().isEmpty()) return false;
         return !(input.contains(",") || input.contains("\"") || input.contains("\n") || input.contains("\r"));
     }
@@ -42,4 +44,41 @@ public class User {
         }         
     }
 
-}
+    public static boolean delete(String filename, String idToDelete) throws IOException {
+        ArrayList<String> keptLines = new ArrayList<>();
+        boolean deleted = false;
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+
+            if (!cleanInput(idToDelete)) {
+                throw new IllegalArgumentException("Invalid Input!");
+            }   
+
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                String[] parts = line.split(",", 2);
+                String id = parts[0];
+
+                if (id.equals(idToDelete)) {
+                    deleted = true;    
+                } 
+                
+                else {
+                    keptLines.add(line);
+                }
+            }
+        }
+
+        if (deleted) {
+            try (PrintWriter writer = new PrintWriter(new FileWriter(filename, false))) {
+                for (String kept : keptLines) {
+                    writer.println(kept);
+                }
+            }
+        }
+
+        return deleted;
+    }}

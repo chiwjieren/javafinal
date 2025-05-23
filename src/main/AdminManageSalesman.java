@@ -125,6 +125,39 @@ public class AdminManageSalesman implements ActionListener{
         }
 
         if (e.getSource() == delete) {
+            try {
+                String id = JOptionPane.showInputDialog(jframe, "Salesman ID to delete: ");
+                Salesman.delete("salesman.txt", id);
+
+                JOptionPane.showMessageDialog(jframe,
+                    "Deleted SalesmanID: " + id,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+            catch (IllegalArgumentException ex) {
+                
+                JOptionPane.showMessageDialog(
+                    jframe,
+                    "Please don’t use commas, quotes, line breaks or leave blanks in username/password.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+            catch (IOException ex) {
+
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    jframe,
+                    "Could not save registration. Please try again.",
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+            refreshTable();
 
         }
         
