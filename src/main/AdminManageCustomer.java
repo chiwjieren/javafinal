@@ -18,7 +18,7 @@ public class AdminManageCustomer implements ActionListener{
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button add, delete, search, update, back;
+    Button delete, search, update, back;
     AdminPage adminPage;
 
     public AdminManageCustomer(AdminPage adminPage) {

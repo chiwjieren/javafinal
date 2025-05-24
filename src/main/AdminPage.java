@@ -11,6 +11,7 @@ public class AdminPage implements ActionListener{
 
     public static AdminManageSalesman manageSalesman;
     public static AdminManageCustomer manageCustomer;
+    public static AdminManageCar manageCar;
 
     public AdminPage() {
         jframe = new JFrame("Admin Page");
@@ -58,7 +59,7 @@ public class AdminPage implements ActionListener{
         }
 
         else if (e.getSource() == mngCar) {
-            
+            manageCar = new AdminManageCar(this);
         }
 
         else if (e.getSource() == paymentAnalysis) {
