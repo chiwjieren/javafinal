@@ -8,6 +8,7 @@ import java.awt.Button;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -74,7 +75,7 @@ public class AdminManageCar implements ActionListener {
                 line = line.trim();
                 if (line.isEmpty()) continue;
                 String[] parts = line.split(",", 6);
-                if (parts.length < 2) continue;
+                if (parts.length < 6) continue;
                 tableModel.addRow(new Object[]{ parts[0], parts[1], parts[2], parts[3], parts[4], parts[5] });
             }
         } catch (IOException e) {}
@@ -82,6 +83,83 @@ public class AdminManageCar implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == add) {
+            try {
+                String id = Car.getNextCarID("cars.txt");
+                String carModel = JOptionPane.showInputDialog(jframe, "Enter Car Model:");
+                String priceStr = JOptionPane.showInputDialog(jframe, "Enter Car Price:");
+                int carPrice;
+
+                try {
+                    carPrice = Integer.parseInt(priceStr);
+                } 
+                
+                catch (NumberFormatException nfe) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Car Price must be a number.",
+                        "Invalid Input",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                String carType = JOptionPane.showInputDialog(jframe, "Enter Car Type:");
+                String carBrand = JOptionPane.showInputDialog(jframe, "Enter Car Brand:");
+
+                String[] categories = { "Luxury", "Affordable" };
+                String carCategory = (String) JOptionPane.showInputDialog(jframe, "Select Car Category:", "Category", JOptionPane.QUESTION_MESSAGE, null, categories, categories[0]);
+
+                if (!Car.cleanInput(carModel) || !Car.cleanInput(carType) || !Car.cleanInput(carBrand) || !Car.cleanInput(carCategory)) {
+                    throw new IllegalArgumentException("Invalid Input");
+                }
+
+                Car.addCar("cars.txt", id, carModel, carPrice, carType, carBrand, carCategory);
+
+                JOptionPane.showMessageDialog(jframe,
+                    "Car added!\nCarID is " + id,
+                    "Success",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+            }
+
+            catch (IllegalArgumentException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    jframe,
+                    "Please don’t use commas, quotes, line breaks or leave blanks in any field.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+            catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(
+                    jframe,
+                    "Could not save car. Please try again.",
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+
+            refreshTable();
+        }
+
+        if (e.getSource() == delete) {
+            
+        }
+
+        if (e.getSource() == search) {
+            
+        }
+
+        if (e.getSource() == update) {
+            
+        }
+
+        if (e.getSource() == back) {
+            jframe.dispose();
+            adminPage.jframe.setVisible(true);          
+        }
 
     }
     
