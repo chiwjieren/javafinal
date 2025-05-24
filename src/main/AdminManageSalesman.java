@@ -29,7 +29,12 @@ public class AdminManageSalesman implements ActionListener{
         jframe.setSize(500,500);
         jframe.setLocation(400,100);
 
-        tableModel = new DefaultTableModel(new String[] {"ID", "Username"}, 0);
+        tableModel = new DefaultTableModel(new String[] {"ID", "Username"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
 
         jtable = new JTable(tableModel);
         jframe.add(new JScrollPane(jtable), BorderLayout.CENTER);
@@ -162,7 +167,7 @@ public class AdminManageSalesman implements ActionListener{
         }
         
         if (e.getSource() == search) {
-            
+
         }
 
         if (e.getSource() == update) {
@@ -202,6 +207,7 @@ public class AdminManageSalesman implements ActionListener{
                         "Successfully updated " + id,
                         "Updated",
                         JOptionPane.INFORMATION_MESSAGE);
+                        
                     refreshTable();
                 } 
                 
