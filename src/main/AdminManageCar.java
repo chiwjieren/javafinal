@@ -18,7 +18,7 @@ public class AdminManageCar implements ActionListener {
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button add, delete, search, update, back;
+    Button add, delete, update, back;
     AdminPage adminPage;
 
     public AdminManageCar(AdminPage adminPage) {
@@ -41,19 +41,16 @@ public class AdminManageCar implements ActionListener {
         JPanel panel = new JPanel(new GridLayout(1,5,5,5));
         add = new Button("Add");
         delete = new Button("Delete");
-        search = new Button("Search");
         update = new Button("Update");
         back   = new Button("Back");
 
         add.addActionListener(this);
         delete.addActionListener(this);
-        search.addActionListener(this);
         update.addActionListener(this);
         back.addActionListener(this);
 
         panel.add(add);
         panel.add(delete);
-        panel.add(search);
         panel.add(update);
         panel.add(back);
 
@@ -182,10 +179,6 @@ public class AdminManageCar implements ActionListener {
             }
 
             refreshTable();
-        }
-
-        if (e.getSource() == search) {
-            
         }
 
         if (e.getSource() == update) {

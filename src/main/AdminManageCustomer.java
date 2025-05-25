@@ -18,7 +18,7 @@ public class AdminManageCustomer implements ActionListener{
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button delete, search, update, back;
+    Button delete, update, back;
     AdminPage adminPage;
 
     public AdminManageCustomer(AdminPage adminPage) {
@@ -40,17 +40,14 @@ public class AdminManageCustomer implements ActionListener{
 
         JPanel panel = new JPanel(new GridLayout(1,5,5,5));
         delete = new Button("Delete");
-        search = new Button("Search");
         update = new Button("Update");
         back   = new Button("Back");
 
         delete.addActionListener(this);
-        search.addActionListener(this);
         update.addActionListener(this);
         back.addActionListener(this);
 
         panel.add(delete);
-        panel.add(search);
         panel.add(update);
         panel.add(back);
 
@@ -120,10 +117,6 @@ public class AdminManageCustomer implements ActionListener{
             refreshTable();
         }
         
-        if (e.getSource() == search) {
-
-        }
-
         if (e.getSource() == update) {
             String id = JOptionPane.showInputDialog(jframe, "Enter Customer ID to update:");
             if (id == null || id.isBlank()) return;
