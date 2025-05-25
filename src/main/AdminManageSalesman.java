@@ -130,40 +130,43 @@ public class AdminManageSalesman implements ActionListener{
         }
 
         if (e.getSource() == delete) {
-            try {
-                String id = JOptionPane.showInputDialog(jframe, "Salesman ID to delete: ");
-                Salesman.delete("salesman.txt", id);
+            String id = JOptionPane.showInputDialog(jframe, "Salesman ID to delete:");
+            if (id == null || id.isBlank()) return;  
 
-                JOptionPane.showMessageDialog(jframe,
-                    "Deleted SalesmanID: " + id,
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+            try {
+                boolean ok = Salesman.delete("salesman.txt", id);
+                
+                if (ok) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Deleted SalesmanID: " + id,
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } 
+                
+                else {
+                    JOptionPane.showMessageDialog(jframe,
+                        "No record found for SalesmanID: " + id,
+                        "Not Found",
+                        JOptionPane.WARNING_MESSAGE);
+                }
             }
 
             catch (IllegalArgumentException ex) {
-                
-                JOptionPane.showMessageDialog(
-                    jframe,
-                    "Please don’t use commas, quotes, line breaks or leave blanks in username/password.",
+                JOptionPane.showMessageDialog(jframe,
+                    "Invalid ID format—no commas, quotes, or blanks allowed.",
                     "Invalid Input",
-                    JOptionPane.ERROR_MESSAGE
-                );
+                    JOptionPane.ERROR_MESSAGE);
             }
 
             catch (IOException ex) {
-
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(
-                    jframe,
-                    "Failed to delete. Please try again.",
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not delete salesman. Please try again.",
                     "I/O Error",
-                    JOptionPane.ERROR_MESSAGE
-                );
+                    JOptionPane.ERROR_MESSAGE);
             }
 
             refreshTable();
-
         }
         
         if (e.getSource() == search) {

@@ -81,40 +81,43 @@ public class AdminManageCustomer implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == delete) {
-            try {
-                String id = JOptionPane.showInputDialog(jframe, "Customer ID to delete: ");
-                Customer.delete("customer.txt", id);
+            String id = JOptionPane.showInputDialog(jframe, "Customer ID to delete:");
+            if (id == null || id.isBlank()) return;  
 
-                JOptionPane.showMessageDialog(jframe,
-                    "Deleted CustomerID: " + id,
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE
-                );
+            try {
+                boolean ok = Customer.delete("customer.txt", id);
+                
+                if (ok) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Deleted CustomerID: " + id,
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } 
+                
+                else {
+                    JOptionPane.showMessageDialog(jframe,
+                        "No record found for CustomerID: " + id,
+                        "Not Found",
+                        JOptionPane.WARNING_MESSAGE);
+                }
             }
 
             catch (IllegalArgumentException ex) {
-                
-                JOptionPane.showMessageDialog(
-                    jframe,
-                    "Please don’t use commas, quotes, line breaks or leave blanks in username/password.",
+                JOptionPane.showMessageDialog(jframe,
+                    "Invalid ID format—no commas, quotes, or blanks allowed.",
                     "Invalid Input",
-                    JOptionPane.ERROR_MESSAGE
-                );
+                    JOptionPane.ERROR_MESSAGE);
             }
 
             catch (IOException ex) {
-
                 ex.printStackTrace();
-                JOptionPane.showMessageDialog(
-                    jframe,
-                    "Failed to delete. Please try again.",
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not delete customer. Please try again.",
                     "I/O Error",
-                    JOptionPane.ERROR_MESSAGE
-                );
+                    JOptionPane.ERROR_MESSAGE);
             }
 
             refreshTable();
-
         }
         
         if (e.getSource() == search) {

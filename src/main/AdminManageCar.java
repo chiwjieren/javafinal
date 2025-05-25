@@ -145,7 +145,43 @@ public class AdminManageCar implements ActionListener {
         }
 
         if (e.getSource() == delete) {
-            
+            String id = JOptionPane.showInputDialog(jframe, "Car ID to delete:");
+            if (id == null || id.isBlank()) return;  
+
+            try {
+                boolean ok = Car.delete("cars.txt", id);
+                
+                if (ok) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Deleted CarID: " + id,
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                } 
+                
+                else {
+                    JOptionPane.showMessageDialog(jframe,
+                        "No record found for CarID: " + id,
+                        "Not Found",
+                        JOptionPane.WARNING_MESSAGE);
+                }
+            }
+
+            catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(jframe,
+                    "Invalid ID format—no commas, quotes, or blanks allowed.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
+            catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not delete car. Please try again.",
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
+            refreshTable();
         }
 
         if (e.getSource() == search) {
