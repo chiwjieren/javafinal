@@ -1,10 +1,9 @@
+import java.awt.Button;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import java.awt.Button;
-import java.awt.FlowLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -126,7 +125,7 @@ public class Page1 implements ActionListener {
                     }
 
                     else {
-                        // Main.salesmanPage = new salesmanPage();
+                        Main.salesmanPage = new SalesmanMain(id);
                     }
                 } 
                 

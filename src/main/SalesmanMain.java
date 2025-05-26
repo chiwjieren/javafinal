@@ -9,10 +9,10 @@ public class SalesmanMain extends JFrame {
     private List<SalesmanData> salesmenlist;
     private List<SalesmanCar> cars;
     private List<SalesmanBookingData> bookings;
-    private String loggedInSalesmanID;
+    private String salesmanID;
 
     public SalesmanMain(String salesmanID) {
-        this.loggedInSalesmanID = salesmanID;
+        this.salesmanID = salesmanID;
         
         // initialize lists
         salesmenlist = new ArrayList<>();
@@ -68,7 +68,7 @@ public class SalesmanMain extends JFrame {
                     "Information", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            new SalesmanCancel(cars, bookings, loggedInSalesmanID);
+            new SalesmanCancel(cars, bookings, salesmanID);
         });
 
         collectPayment.addActionListener(e -> {
@@ -77,7 +77,7 @@ public class SalesmanMain extends JFrame {
                     "Information", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            new SalesmanCollectPayment(bookings, loggedInSalesmanID);
+            new SalesmanCollectPayment(bookings, salesmanID);
         });
 
         viewSales.addActionListener(e -> {
@@ -86,7 +86,7 @@ public class SalesmanMain extends JFrame {
                     "Information", JOptionPane.INFORMATION_MESSAGE);
                 return;
             }
-            new SalesmanViewSales(bookings, cars, loggedInSalesmanID);
+            new SalesmanViewSales(bookings, cars, salesmanID);
         });
 
         exit.addActionListener(e -> {
@@ -115,16 +115,16 @@ public class SalesmanMain extends JFrame {
     private void loadData() {
         try {
             // load all salesmen first
-            List<SalesmanData> allSalesmen = SalesmanData.loadSalesmen("Salesman.txt");
+            List<SalesmanData> allSalesmen = SalesmanData.loadSalesmen("salesman.txt");
             if (allSalesmen == null || allSalesmen.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No salesmen data found in Salesman.txt", 
+                JOptionPane.showMessageDialog(this, "No salesmen data found in salesman.txt", 
                     "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
             // filter to get only the logged-in salesman
             salesmenlist = allSalesmen.stream()
-                .filter(s -> s.getID().equals(loggedInSalesmanID))
+                .filter(s -> s.getID().equals(salesmanID))
                 .collect(Collectors.toList());
             
             if (salesmenlist.isEmpty()) {
