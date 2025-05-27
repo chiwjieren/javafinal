@@ -128,7 +128,8 @@ public class Car {
                 String[] parts = line.split(",", 7);
                 if (parts.length < 6) continue;
                 if (parts[0].equals(id)) {
-                    int price = Integer.parseInt(parts[2]);
+                String numeric = parts[2].replaceAll("[^0-9]", "");
+                int price = Integer.parseInt(numeric);
                     return new Car(parts[0], parts[1], price,
                                    parts[3], parts[4], parts[5], parts[6]);
                 }
@@ -140,7 +141,7 @@ public class Car {
     public static void addCar(String filename, String id, String model, int price, String type, String brand, String category) throws IOException {
         try (PrintWriter out = new PrintWriter(new FileWriter(filename, true))) {
             out.println();
-            out.println(String.join(",", id, model, Integer.toString(price), type, brand, category, "Available"));
+            out.println(String.join(",", id, model, "RM"+Integer.toString(price), type, brand, category, "Available"));
         }
     }
 
@@ -183,51 +184,75 @@ public class Car {
         return deleted;
     }
 
-    public static boolean update(String filename, String idToUpdate, String newCarModel, int newCarPrice, String newCarType, String newCarBrand, String newCarCategory, String status) throws IOException {
+    public static boolean update(
+        String filename,
+        String idToUpdate,
+        String newCarModel,
+        int    newCarPrice,
+        String newCarType,
+        String newCarBrand,
+        String newCarCategory,
+        String newStatus
+    ) throws IOException {
         File inputFile = new File(filename);
         if (!inputFile.exists()) return false;
 
         File tempFile  = new File(inputFile.getParent(), "cars.tmp");
-
         boolean updated = false;
-        try (BufferedReader reader = new BufferedReader(new FileReader(inputFile));
-             BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))) {
 
+        try (
+            BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tempFile))
+        ) {
             String line;
             while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) {
+                    continue;
+                }
 
-                if (line.trim().isEmpty()) {
+                String[] parts = line.split(",", 7);
+                if (parts.length != 7) {
                     writer.write(line);
                     writer.newLine();
                     continue;
                 }
 
-                String[] fields = line.split(",", 7);
-                if (fields.length < 7) {
-                    writer.write(line);
-                }
-
-                else if (fields[0].equals(idToUpdate)) {
-                    if (!cleanInput(idToUpdate) || !cleanInput(newCarModel) || !cleanInput(newCarType) || !cleanInput(newCarBrand) || !cleanInput(newCarCategory)) {
+                if (parts[0].equals(idToUpdate)) {
+                    if (!cleanInput(idToUpdate)
+                    || !cleanInput(newCarModel)
+                    || !cleanInput(Integer.toString(newCarPrice))
+                    || !cleanInput(newCarType)
+                    || !cleanInput(newCarBrand)
+                    || !cleanInput(newCarCategory)
+                    || !cleanInput(newStatus)) {
                         throw new IllegalArgumentException("Invalid Input!");
                     }
 
-                    String newLine = String.join(",", idToUpdate, newCarModel, newCarType, newCarBrand, newCarCategory, status);
-                    writer.write(newLine);
+                    String updatedLine = String.join(",",
+                        idToUpdate,
+                        newCarModel,
+                        "RM" + newCarPrice,   
+                        newCarType,
+                        newCarBrand,
+                        newCarCategory,
+                        newStatus
+                    );
+                    writer.write(updatedLine);
+                    writer.newLine();
                     updated = true;
                 } 
                 
                 else {
                     writer.write(line);
+                    writer.newLine();
                 }
-
-                writer.newLine();
             }
         }
 
         if (updated) {
             if (!inputFile.delete() || !tempFile.renameTo(inputFile)) {
-                throw new IOException("Could not replace original file.");
+                throw new IOException("Failed to replace original file.");
             }
         } 
         
@@ -236,5 +261,6 @@ public class Car {
         }
 
         return updated;
-    }   
+    }
 }
+

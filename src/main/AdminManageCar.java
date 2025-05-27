@@ -182,7 +182,149 @@ public class AdminManageCar implements ActionListener {
         }
 
         if (e.getSource() == update) {
+
+            String id = JOptionPane.showInputDialog(jframe, "Enter Car ID to update:");
+
+            if (id == null || id.isBlank()) return;
+
+            Car existing;
+
+            try {
+                existing = Car.searchCar("cars.txt", id);
+            } 
             
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(jframe,
+                    "I/O error reading car data:\n" + ioe.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (existing == null) {
+                JOptionPane.showMessageDialog(jframe,
+                    "No record found for CarID: " + id,
+                    "Not Found",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String newModel = JOptionPane.showInputDialog(
+                jframe, 
+                "New model:", 
+                existing.getCarModel()
+            );
+
+            if (newModel == null || newModel.isBlank()) return;
+
+            String priceStr = JOptionPane.showInputDialog(
+                jframe,
+                "New price:",
+                Integer.toString(existing.getCarPrice())
+            );
+
+            if (priceStr == null || priceStr.isBlank()) return;
+            
+            int newPrice;
+
+            try {
+                newPrice = Integer.parseInt(priceStr);
+            } 
+            
+            catch (NumberFormatException nfe) {
+                JOptionPane.showMessageDialog(jframe,
+                    "Price must be a number.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            String newType = JOptionPane.showInputDialog(
+                jframe,
+                "New type:",
+                existing.getCarType()
+            );
+
+            if (newType == null || newType.isBlank()) return;
+
+            String newBrand = JOptionPane.showInputDialog(
+                jframe,
+                "New brand:",
+                existing.getCarBrand()
+            );
+
+            if (newBrand == null || newBrand.isBlank()) return;
+
+            String[] categories = { "Luxury", "Affordable" };
+
+            String newCategory = (String) JOptionPane.showInputDialog(
+                jframe,
+                "New category:",
+                "Category",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                categories,
+                existing.getCarCategory()
+            );
+
+            if (newCategory == null) return;
+
+            String[] statuses = { "Available", "Rented", "Maintenance" };
+
+            String newStatus = (String) JOptionPane.showInputDialog(
+                jframe,
+                "New status:",
+                "Status",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                statuses,
+                existing.getStatus()
+            );
+
+            if (newStatus == null) return;
+
+            if (!Car.cleanInput(newModel) || !Car.cleanInput(newType) || !Car.cleanInput(newBrand) || !Car.cleanInput(newCategory) || !Car.cleanInput(newStatus)) {
+                JOptionPane.showMessageDialog(jframe,
+                    "Invalid input: no commas, quotes, line breaks, or blanks allowed.",
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try {
+                boolean ok = Car.update( "cars.txt", id, newModel, newPrice, newType, newBrand, newCategory, newStatus);
+
+                if (ok) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Successfully updated CarID: " + id,
+                        "Updated",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    refreshTable();
+                } 
+                
+                else {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Update failed: no such ID.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                }
+
+            } 
+            
+            catch (IllegalArgumentException iae) {
+                JOptionPane.showMessageDialog(jframe,
+                    iae.getMessage(),
+                    "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+            } 
+            
+            catch (IOException ioe) {
+                JOptionPane.showMessageDialog(jframe,
+                    "I/O error updating car:\n" + ioe.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+
         }
 
         if (e.getSource() == back) {
