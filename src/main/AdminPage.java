@@ -9,10 +9,6 @@ public class AdminPage implements ActionListener{
     JFrame jframe;
     Button mngSalesman, mngCustomer, mngCar, analysis, report, logout;
 
-    public static AdminManageSalesman manageSalesman;
-    public static AdminManageCustomer manageCustomer;
-    public static AdminManageCar manageCar;
-
     public AdminPage() {
         jframe = new JFrame("Admin Page");
         jframe.setSize(500,500);
@@ -43,24 +39,26 @@ public class AdminPage implements ActionListener{
         jframe.setVisible(true);
     }
 
+    public JFrame getFrame() { return jframe; }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         jframe.setVisible(false);
 
         if (e.getSource() == mngSalesman) {
-            manageSalesman = new AdminManageSalesman(this);
+           new AdminManageSalesman(this);
         }
 
         else if (e.getSource() == mngCustomer) {
-            manageCustomer = new AdminManageCustomer(this);
+           new AdminManageCustomer(this);
         }
 
         else if (e.getSource() == mngCar) {
-            manageCar = new AdminManageCar(this);
+            new AdminManageCar(this);
         }
 
         else if (e.getSource() == analysis) {
-            
+            new AdminAnalysisPage(this);
         }
 
         else if (e.getSource() == report) {
@@ -68,7 +66,7 @@ public class AdminPage implements ActionListener{
         }
 
         else if (e.getSource() == logout) {
-            Main.first = new Page1();
+            new Page1();
         }
     }
 
