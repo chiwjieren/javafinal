@@ -6,10 +6,19 @@ import java.util.ArrayList;
 
 public class Customer extends User {
 
-    String customerID;
+    private String customerID;
 
     public Customer(String username, String password, String customerID) {
         super(username, password);
+        this.customerID = customerID;
+    }
+
+    public String getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(String customerID) {
+        if (!cleanInput(customerID)) throw new IllegalArgumentException("Invalid ID");
         this.customerID = customerID;
     }
 

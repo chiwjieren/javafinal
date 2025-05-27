@@ -8,20 +8,85 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Car {
-    String carID;
-    String carModel;
-    int carPrice;
-    String carType;
-    String carBrand;
-    String carCategory;
+    private String carID;
+    private String carModel;
+    private int carPrice;
+    private String carType;
+    private String carBrand;
+    private String carCategory;
+    private String status;
 
-    public Car(String carID, String carModel, int carPrice, String carType, String carBrand, String carCategory) {
+    public Car(String carID, String carModel, int carPrice, String carType, String carBrand, String carCategory, String status) {
         this.carID = carID;
         this.carModel = carModel;
         this.carPrice = carPrice;
         this.carType = carType;
         this.carBrand = carBrand;
         this.carCategory = carCategory;
+        this.status = status;
+    }
+
+    public String getCarID() {
+        return carID;
+    }
+
+    public void setCarID(String carID) {
+        if (!cleanInput(carID)) throw new IllegalArgumentException("Invalid ID");
+        this.carID = carID;
+    }
+
+    public String getCarModel() {
+        return carModel;
+    }
+
+    public void setCarModel(String carModel) {
+        if (!cleanInput(carModel)) throw new IllegalArgumentException("Invalid model");
+        this.carModel = carModel;
+    }
+
+    public int getCarPrice() {
+        return carPrice;
+    }
+
+    public void setCarPrice(int carPrice) {
+        if (carPrice < 0) throw new IllegalArgumentException("Price must be non-negative");
+        this.carPrice = carPrice;
+    }
+
+    public String getCarType() {
+        return carType;
+    }
+
+    public void setCarType(String carType) {
+        if (!cleanInput(carType)) throw new IllegalArgumentException("Invalid type");
+        this.carType = carType;
+    }
+
+    public String getCarBrand() {
+        return carBrand;
+    }
+
+    public void setCarBrand(String carBrand) {
+        if (!cleanInput(carBrand)) throw new IllegalArgumentException("Invalid brand");
+        this.carBrand = carBrand;
+    }
+
+    public String getCarCategory() {
+        return carCategory;
+    }
+
+    public void setCarCategory(String carCategory) {
+        if (!cleanInput(carCategory)) throw new IllegalArgumentException("Invalid category");
+        this.carCategory = carCategory;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        if (!cleanInput(status)) throw new IllegalArgumentException("Invalid status");
+        this.status = status;
     }
 
     public static String getNextCarID(String filename) throws IOException {
@@ -41,7 +106,7 @@ public class Car {
             }
         }
 
-        String[] line = lastLine.split(",", 6);
+        String[] line = lastLine.split(",", 7);
         String lastID = line[0];
         
         int num = Integer.parseInt(lastID.substring(3));
@@ -60,12 +125,12 @@ public class Car {
             String line;
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
-                String[] parts = line.split(",", 6);
+                String[] parts = line.split(",", 7);
                 if (parts.length < 6) continue;
                 if (parts[0].equals(id)) {
                     int price = Integer.parseInt(parts[2]);
                     return new Car(parts[0], parts[1], price,
-                                   parts[3], parts[4], parts[5]);
+                                   parts[3], parts[4], parts[5], parts[6]);
                 }
             }
         }
@@ -75,7 +140,7 @@ public class Car {
     public static void addCar(String filename, String id, String model, int price, String type, String brand, String category) throws IOException {
         try (PrintWriter out = new PrintWriter(new FileWriter(filename, true))) {
             out.println();
-            out.println(String.join(",", id, model, Integer.toString(price), type, brand, category));
+            out.println(String.join(",", id, model, Integer.toString(price), type, brand, category, "Available"));
         }
     }
 
@@ -94,7 +159,7 @@ public class Car {
                 line = line.trim();
                 if (line.isEmpty()) continue;
 
-                String[] parts = line.split(",", 6);
+                String[] parts = line.split(",", 7);
                 String id = parts[0];
 
                 if (id.equals(idToDelete)) {
@@ -118,7 +183,7 @@ public class Car {
         return deleted;
     }
 
-    public static boolean update(String filename, String idToUpdate, String newCarModel, int newCarPrice, String newCarType, String newCarBrand, String newCarCategory) throws IOException {
+    public static boolean update(String filename, String idToUpdate, String newCarModel, int newCarPrice, String newCarType, String newCarBrand, String newCarCategory, String status) throws IOException {
         File inputFile = new File(filename);
         if (!inputFile.exists()) return false;
 
@@ -137,8 +202,8 @@ public class Car {
                     continue;
                 }
 
-                String[] fields = line.split(",", 6);
-                if (fields.length < 6) {
+                String[] fields = line.split(",", 7);
+                if (fields.length < 7) {
                     writer.write(line);
                 }
 
@@ -147,7 +212,7 @@ public class Car {
                         throw new IllegalArgumentException("Invalid Input!");
                     }
 
-                    String newLine = String.join(",", idToUpdate, newCarModel, newCarType, newCarBrand, newCarCategory);
+                    String newLine = String.join(",", idToUpdate, newCarModel, newCarType, newCarBrand, newCarCategory, status);
                     writer.write(newLine);
                     updated = true;
                 } 

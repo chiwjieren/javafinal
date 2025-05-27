@@ -18,4 +18,3 @@ CAR017,Triton,RM125000,Pickup,Mitsubishi,Affordable,Available
 CAR018,Ranger,RM148000,Pickup,Ford,Affordable,Available
 CAR019,Persona,RM70000,Sedan,Proton,Affordable,Available
 CAR020,Ioniq 5,RM270000,Crossover,Hyundai,Luxury,Available
-CAR021,Car1,12345,CarType1,CarBrand1,Luxury

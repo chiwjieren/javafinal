@@ -8,16 +8,26 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class User {
-    String username;
-    String password;
+    private String username;
+    private String password;
 
     public User(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    public void setUsername(String username) {
+        if (!cleanInput(username)) throw new IllegalArgumentException("Invalid username");
+        this.username = username;
+    }
+
     public String getUsername() {
         return username;
+    }
+
+    public void setPassword(String password) {
+        if (!cleanInput(password)) throw new IllegalArgumentException("Invalid password");
+        this.password = password;
     }
 
     public String getPassword() {

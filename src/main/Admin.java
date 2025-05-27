@@ -5,10 +5,19 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Admin extends User {
-    String adminID;
+    private String adminID;
 
     public Admin(String username, String password, String adminID) {
         super(username, password);
+        this.adminID = adminID;
+    }
+
+    public String getAdminID() {
+        return adminID;
+    }
+
+    public void setAdminID(String adminID) {
+        if (!cleanInput(adminID)) throw new IllegalArgumentException("Invalid ID");
         this.adminID = adminID;
     }
     
