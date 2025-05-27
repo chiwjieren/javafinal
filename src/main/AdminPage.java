@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class AdminPage implements ActionListener{
     JFrame jframe;
-    Button mngSalesman, mngCustomer, mngCar, paymentAnalysis, feedbackAnalysis, report, logout;
+    Button mngSalesman, mngCustomer, mngCar, analysis, report, logout;
 
     public static AdminManageSalesman manageSalesman;
     public static AdminManageCustomer manageCustomer;
@@ -21,25 +21,22 @@ public class AdminPage implements ActionListener{
         mngSalesman = new Button("All Salesmans");
         mngCustomer = new Button("All Customers");
         mngCar = new Button("All Cars");
-        paymentAnalysis = new Button("Payments");
-        feedbackAnalysis = new Button("Feedbacks");
+        analysis = new Button("Payment & Feedback Analysis");
         report = new Button("Reports");
         logout = new Button("Logout");
 
         mngSalesman.addActionListener(this);
         mngCustomer.addActionListener(this);
         mngCar.addActionListener(this);
-        paymentAnalysis.addActionListener(this);
-        feedbackAnalysis.addActionListener(this);
+        analysis.addActionListener(this);
         report.addActionListener(this);
         logout.addActionListener(this);
 
-        jframe.setLayout(new GridLayout(7,1,5,5));
+        jframe.setLayout(new GridLayout(6,1,5,5));
         jframe.add(mngSalesman);
         jframe.add(mngCustomer);
         jframe.add(mngCar);
-        jframe.add(paymentAnalysis);
-        jframe.add(feedbackAnalysis);    
+        jframe.add(analysis);
         jframe.add(report);
         jframe.add(logout);
 
@@ -62,11 +59,7 @@ public class AdminPage implements ActionListener{
             manageCar = new AdminManageCar(this);
         }
 
-        else if (e.getSource() == paymentAnalysis) {
-            
-        }
-
-        else if (e.getSource() == feedbackAnalysis) {
+        else if (e.getSource() == analysis) {
             
         }
 
