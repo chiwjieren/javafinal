@@ -38,7 +38,7 @@ public class Sale {
     public String getCustomerReview()   { return customerReview; }
     public String getSalesmanComment()  { return salesmanComment; }
 
-    public static Sale fromCsv(String line) {
+    public static Sale getSale(String line) {
         String[] f = line.split(",", 8);
         return new Sale(
             f[0], f[1], f[2], f[3],
@@ -53,7 +53,7 @@ public class Sale {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (!line.isBlank()) list.add(fromCsv(line));
+                if (!line.isBlank()) list.add(getSale(line));
             }
         }
         return list;

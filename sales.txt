@@ -1,2 +1,12 @@
-SA001,C0001,S0001,CAR001,2025-05-24 15:30:00,5,Great Service!,Salesman Comment1
-SA002,C0002,S0002,CAR002,2025-05-25 08:00:00,2,Bad Service,Salesman Comment2
+SA001,C0001,S0001,CAR001,2025-05-24 15:30:00,5,Great Service!,Customer was very impressed with the test drive—highlighted smooth handling and luxury features.
+SA002,C0002,S0002,CAR002,2025-05-25 08:00:00,2,Bad Service,Customer felt the staff was rushed and didn’t explain financing options clearly.
+SA003,C0003,S0003,CAR003,2025-05-26 10:15:00,4,Good car condition.,Vehicle was well‐maintained, though customer requested a deeper engine walkthrough.
+SA004,C0004,S0004,CAR004,2025-05-26 11:00:00,5,Very friendly.,Customer praised the salesperson’s patient demo of all interior features.
+SA005,C0005,S0005,CAR005,2025-05-27 09:45:00,3,Average experience.,Customer would have liked more details on warranty and service plans.
+SA006,C0006,S0001,CAR006,2025-05-27 13:20:00,5,Excellent handling!,Customer enjoyed the performance test—especially responsive steering.
+SA007,C0007,S0002,CAR007,2025-05-28 14:05:00,4,Clean and neat.,Vehicle was spotless; customer appreciated the detailed cleaning and prep.
+SA008,C0008,S0003,CAR008,2025-05-28 16:30:00,2,Not impressed.,Customer felt the pricing wasn’t competitive and left without follow‐up.
+SA009,C0009,S0004,CAR009,2025-05-29 10:10:00,5,Great value!,Customer happy with price match and added free first‐service package.
+SA010,C0010,S0005,CAR010,2025-05-29 12:00:00,4,Smooth transaction.,Financing approval was quick; documentation handed over without hiccups.
+SA011,C0011,S0001,CAR011,2025-05-30 09:00:00,5,Loved the test drive!,Customer enthusiastic about electric range and premium sound system.
+SA012,C0012,S0002,CAR012,2025-05-30 11:30:00,3,Could improve speed.,Customer wanted more acceleration data but left pleased with friendliness of staff.

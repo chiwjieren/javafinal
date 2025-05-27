@@ -62,7 +62,7 @@ public class AdminPage implements ActionListener{
         }
 
         else if (e.getSource() == report) {
-            
+            new AdminReportPage(this);
         }
 
         else if (e.getSource() == logout) {
