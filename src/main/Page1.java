@@ -125,7 +125,7 @@ public class Page1 implements ActionListener {
                     }
 
                     else {
-                        Main.salesmanPage = new SalesmanMain(id);
+                        
                     }
                 } 
                 
