@@ -5,13 +5,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Salesman extends User{
-    String salesmanID;
+    private String salesmanID;
 
     public Salesman(String username, String password, String salesmanID) {
         super(username, password);
         this.salesmanID = salesmanID;
     }
-    
+
+    public String getSalesmanID() {
+        return salesmanID;
+    }
+
+    public void setCarID(String salesmanID) {
+        if (!cleanInput(salesmanID)) throw new IllegalArgumentException("Invalid ID");
+        this.salesmanID = salesmanID;
+    }
+
     public static String getNextSalesmanID(String filename) throws IOException {
         File file = new File(filename);
 
