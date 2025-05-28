@@ -1,2 +1,0 @@
-
-CAR013,City,RM98000,Sedan,Honda,Affordable,Booked
