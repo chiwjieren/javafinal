@@ -3,10 +3,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +20,7 @@ public class AdminManageCustomer implements ActionListener{
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button delete, update, back;
+    Button search, delete, update, back;
     AdminPage adminPage;
 
     public AdminManageCustomer(AdminPage adminPage) {
@@ -40,14 +42,17 @@ public class AdminManageCustomer implements ActionListener{
 
         JPanel panel = new JPanel(new GridLayout(1,5,5,5));
         delete = new Button("Delete");
+        search = new Button("Search");
         update = new Button("Update");
         back   = new Button("Back");
 
         delete.addActionListener(this);
+        search.addActionListener(this);
         update.addActionListener(this);
         back.addActionListener(this);
 
         panel.add(delete);
+        panel.add(search);
         panel.add(update);
         panel.add(back);
 
@@ -77,6 +82,69 @@ public class AdminManageCustomer implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == search) {
+            String id = JOptionPane.showInputDialog(jframe, "Enter Customer ID to search:");
+            if (id == null || id.isBlank()) return;
+
+            Customer existing = Customer.searchCustomer("customer.txt", id);
+
+            if (existing == null) {
+                JOptionPane.showMessageDialog(jframe,
+                    "No record found for CustomerID: " + id,
+                    "Not Found",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Customer Details:\n")
+              .append("ID: ").append(id).append("\n")
+              .append("Username: ").append(existing.getUsername()).append("\n\n")
+              .append("Sales:\n");
+
+            boolean anySale = false;
+            try (BufferedReader br = new BufferedReader(new FileReader("sales.txt"))) {
+                String line;
+
+                while ((line = br.readLine()) != null) {
+                    String[] f = line.split(",", 8);
+
+                    if (f.length < 4) continue;
+
+                    if (f[1].equals(id)) {  
+                        sb.append("• SaleID: ").append(f[0])
+                          .append(" | Salesman: ").append(f[2])
+                          .append(" | Car: ").append(f[3])
+                          .append(" | Date: ").append(f[4])
+                          .append(" | Rating: ").append(f[5]).append("\n");
+                        anySale = true;
+                    }
+                }
+            } 
+            
+            catch (IOException ioe) {
+                ioe.printStackTrace();
+                sb.append("\nError reading sales.txt: ").append(ioe.getMessage());
+            }
+
+            if (!anySale) {
+                sb.append("  (No sales found for this customer.)");
+            }
+
+            JTextArea area = new JTextArea(sb.toString());
+            area.setEditable(false);
+            area.setCaretPosition(0);
+            JScrollPane sp = new JScrollPane(area);
+            sp.setPreferredSize(new Dimension(450, 300));
+
+            JOptionPane.showMessageDialog(jframe,
+                sp,
+                "Search Results for " + id,
+                JOptionPane.INFORMATION_MESSAGE);
+
+            return;
+        }
+        
         if (e.getSource() == delete) {
             String id = JOptionPane.showInputDialog(jframe, "Customer ID to delete:");
             if (id == null || id.isBlank()) return;  
