@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,13 +14,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 public class AdminManageSalesman implements ActionListener{
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button add, delete, update, back;
+    Button add, delete, search, update, back;
     AdminPage adminPage;
 
     public AdminManageSalesman(AdminPage adminPage) {
@@ -42,16 +44,19 @@ public class AdminManageSalesman implements ActionListener{
         JPanel panel = new JPanel(new GridLayout(1,5,5,5));
         add = new Button("Add");
         delete = new Button("Delete");
+        search = new Button("Search");
         update = new Button("Update");
         back   = new Button("Back");
 
         add.addActionListener(this);
         delete.addActionListener(this);
+        search.addActionListener(this);
         update.addActionListener(this);
         back.addActionListener(this);
 
         panel.add(add);
         panel.add(delete);
+        panel.add(search);
         panel.add(update);
         panel.add(back);
 
@@ -124,6 +129,63 @@ public class AdminManageSalesman implements ActionListener{
 
             refreshTable();
             
+        }
+
+        else if (e.getSource() == search) {
+            String id = JOptionPane.showInputDialog(jframe, "Enter Salesman ID to search:");
+            if (id == null || id.isBlank()) return;
+
+            Salesman existing = Salesman.searchSalesman("salesman.txt", id);
+            if (existing == null) {
+                JOptionPane.showMessageDialog(jframe,
+                    "No record found for SalesmanID: " + id,
+                    "Not Found",
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("Salesman Details:\n")
+            .append("ID: ").append(id).append("\n")
+            .append("Username: ").append(existing.getUsername()).append("\n")
+            .append("Password: ").append(existing.getPassword()).append("\n\n")
+            .append("Sales:\n");
+
+            try (BufferedReader br = new BufferedReader(new FileReader("sales.txt"))) {
+                String line;
+                boolean anySale = false;
+                while ((line = br.readLine()) != null) {
+                    String[] f = line.split(",", 8);
+                    if (f.length < 3) continue;
+                    if (f[2].equals(id)) {
+                        sb.append("• SaleID: ").append(f[0])
+                        .append(" | Customer: ").append(f[1])
+                        .append(" | Car: ").append(f[3])
+                        .append(" | Date: ").append(f[4])
+                        .append(" | Rating: ").append(f[5]).append("\n");
+                        anySale = true;
+                    }
+                }
+                if (!anySale) {
+                    sb.append("  (No sales found for this salesman.)");
+                }
+            } 
+
+            catch (IOException ioe) {
+                ioe.printStackTrace();
+                sb.append("\n\nError reading sales.txt: ").append(ioe.getMessage());
+            }
+
+            JTextArea ta = new JTextArea(sb.toString());
+            ta.setEditable(false);
+            ta.setCaretPosition(0);
+            JScrollPane sp = new JScrollPane(ta);
+            sp.setPreferredSize(new Dimension(450, 300));
+
+            JOptionPane.showMessageDialog(jframe,
+                sp,
+                "Search Results for " + id,
+                JOptionPane.INFORMATION_MESSAGE);
         }
 
         if (e.getSource() == delete) {
