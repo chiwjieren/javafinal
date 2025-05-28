@@ -2,12 +2,13 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.IOException;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout, Bookings;
+    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout, Bookings, editProfile;
 
     public static CustomerViewAvailableCars viewAvailableCars;
 
@@ -24,6 +25,7 @@ public class CustomerPage implements ActionListener {
         History = new Button("History");
         Logout = new Button("Logout");
         Bookings = new Button("Bookings");
+        editProfile = new Button("Edit Profile");
 
         AvailableCars.addActionListener(this);
         AffordableCars.addActionListener(this);
@@ -33,6 +35,7 @@ public class CustomerPage implements ActionListener {
         History.addActionListener(this);
         Logout.addActionListener(this);
         Bookings.addActionListener(this);
+        editProfile.addActionListener(this);
 
         jframe.setLayout(new GridLayout(6,1,5,5));
         jframe.add(AvailableCars);
@@ -43,9 +46,13 @@ public class CustomerPage implements ActionListener {
         jframe.add(History);
         jframe.add(Logout);
         jframe.add(Bookings);
+        jframe.add(editProfile);
 
         jframe.setVisible(true);
     }
+
+    public JFrame getFrame() { return jframe; }
+
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -84,8 +91,23 @@ public class CustomerPage implements ActionListener {
             //ViewBookings = new CustomerBookings(this);
         }
 
-        
-        
-        
+        if (e.getSource() == editProfile) {
+
+            try {
+                new CustomerEditProfile(this, Main.currentCustomerID);
+            } 
+
+             
+            catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not load profile: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                jframe.setVisible(true);
+            }
+ 
+        }
+    
     }
 }
