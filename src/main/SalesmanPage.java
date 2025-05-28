@@ -2,8 +2,10 @@ import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class SalesmanPage implements ActionListener{
     JFrame jframe;
@@ -43,7 +45,20 @@ public class SalesmanPage implements ActionListener{
         jframe.setVisible(false);
 
         if (e.getSource() == editProfile) {
-           
+
+           try {
+                new SalesmanEditProfile(this, Main.currentSalesmanID);
+            } 
+            
+            catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not load profile: " + ex.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+                jframe.setVisible(true);
+            }
+            
         }
 
         else if (e.getSource() == viewCars) {

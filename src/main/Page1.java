@@ -121,10 +121,12 @@ public class Page1 implements ActionListener {
                     }
 
                     else if (role == 'C') {
+                        Main.currentCustomerID = id;
                         Main.customerPage = new CustomerPage();
                     }
 
                     else {
+                        Main.currentSalesmanID = id;
                         Main.salesmanPage = new SalesmanPage();
                     }
                 } 
