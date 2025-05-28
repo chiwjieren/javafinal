@@ -1,0 +1,2 @@
+
+CAR001,Alphard,RM450000,MPV,Toyota,Luxury,Available

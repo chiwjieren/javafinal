@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout;
+    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout, Bookings;
 
     public static CustomerViewAvailableCars viewAvailableCars;
 
@@ -23,6 +23,7 @@ public class CustomerPage implements ActionListener {
         FindCar = new Button("Find Car");
         History = new Button("History");
         Logout = new Button("Logout");
+        Bookings = new Button("Bookings");
 
         AvailableCars.addActionListener(this);
         AffordableCars.addActionListener(this);
@@ -31,6 +32,7 @@ public class CustomerPage implements ActionListener {
         FindCar.addActionListener(this);
         History.addActionListener(this);
         Logout.addActionListener(this);
+        Bookings.addActionListener(this);
 
         jframe.setLayout(new GridLayout(6,1,5,5));
         jframe.add(AvailableCars);
@@ -40,6 +42,7 @@ public class CustomerPage implements ActionListener {
         jframe.add(FindCar);
         jframe.add(History);
         jframe.add(Logout);
+        jframe.add(Bookings);
 
         jframe.setVisible(true);
     }
@@ -76,7 +79,10 @@ public class CustomerPage implements ActionListener {
         else if (e.getSource() == Logout) {
             Main.first = new Page1();
         }
-        
+
+        else if (e.getSource() == Bookings) {
+            //ViewBookings = new CustomerBookings(this);
+        }
 
         
         

@@ -1,4 +1,3 @@
-CAR001,Alphard,RM450000,MPV,Toyota,Luxury,Paid
 CAR002,Vios,RM85000,Sedan,Toyota,Affordable,Paid
 CAR003,Teana,RM120000,Sedan,Nissan,Affordable,Paid
 CAR004,Axia,RM41000,Hatchback,Perodua,Affordable,Paid
