@@ -77,7 +77,9 @@ public class CustomerViewAvailableCars implements ActionListener{
                 if (line.isEmpty()) continue;
                 String[] parts = line.split(",", 7);
                 if (parts.length < 7) continue;
-                tableModel.addRow(parts);
+                if (parts[6].equals("Available")) {
+                    tableModel.addRow(parts);
+                }
             }
             
         } catch (IOException e) {}
@@ -95,9 +97,12 @@ public class CustomerViewAvailableCars implements ActionListener{
             if (id == null || id.isBlank()) return;  
 
             try {
+
                 Car car = Car.searchCar("cars.txt", id);
-                Car.addCar("booking.txt", car.getCarID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
-                boolean ok = Car.delete("cars.txt", id);
+                if (car.getStatus().equals("Available")) {
+                    Car.addCar("booking.txt", car.getCarID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
+                    boolean ok = Car.delete("cars.txt", id);
+                    Car.updateStatus("booking.txt", id, "Booked");
                 
 
                 
@@ -108,6 +113,7 @@ public class CustomerViewAvailableCars implements ActionListener{
                         JOptionPane.INFORMATION_MESSAGE);
                 } 
                 
+                }
                 else {
                     JOptionPane.showMessageDialog(jframe,
                         "CarID not available: " + id,
