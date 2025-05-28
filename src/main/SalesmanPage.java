@@ -58,11 +58,11 @@ public class SalesmanPage implements ActionListener{
                     JOptionPane.ERROR_MESSAGE);
                 jframe.setVisible(true);
             }
-            
+
         }
 
         else if (e.getSource() == viewCars) {
-
+            new SalesmanManageCar(this);
         }
 
         else if (e.getSource() == collectPayment) {

@@ -262,5 +262,47 @@ public class Car {
 
         return updated;
     }
+
+    public static boolean updateStatus(String filename, String carID, String newStatus) throws IOException {
+        File in  = new File(filename);
+        File tmp = new File(in.getParent(), "cars.tmp");
+        boolean updated = false;
+
+        try (BufferedReader r = new BufferedReader(new FileReader(in));
+            PrintWriter  w = new PrintWriter(new FileWriter(tmp))) {
+            String line;
+
+            while ((line = r.readLine()) != null) {
+                String[] f = line.split(",", 7);
+
+                if (f.length < 7) {
+                    w.println(line);
+                } 
+                
+                else if (f[0].equals(carID)) {
+                    f[6] = newStatus;
+                    w.println(String.join(",", f));
+                    updated = true;
+                } 
+                
+                else {
+                    w.println(line);
+                }
+            }
+        }
+
+        if (updated) {
+            if (!in.delete() || !tmp.renameTo(in)) {
+                throw new IOException("Could not replace cars file");
+            }
+        } 
+        
+        else {
+            tmp.delete();
+        }
+        
+        return updated;
+    }
+
 }
 
