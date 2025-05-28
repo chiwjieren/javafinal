@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.awt.BorderLayout;
 import java.awt.Button;
+import java.awt.Dimension;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -18,7 +19,7 @@ public class AdminManageCar implements ActionListener {
     JFrame jframe;
     JTable jtable;
     DefaultTableModel tableModel;
-    Button add, delete, update, back;
+    Button add, search, delete, update, back;
     AdminPage adminPage;
 
     public AdminManageCar(AdminPage adminPage) {
@@ -40,16 +41,19 @@ public class AdminManageCar implements ActionListener {
 
         JPanel panel = new JPanel(new GridLayout(1,5,5,5));
         add = new Button("Add");
+        search = new Button("Search");
         delete = new Button("Delete");
         update = new Button("Update");
         back   = new Button("Back");
 
         add.addActionListener(this);
+        search.addActionListener(this);
         delete.addActionListener(this);
         update.addActionListener(this);
         back.addActionListener(this);
 
         panel.add(add);
+        panel.add(search);
         panel.add(delete);
         panel.add(update);
         panel.add(back);
@@ -140,6 +144,56 @@ public class AdminManageCar implements ActionListener {
 
             refreshTable();
         }
+
+        if (e.getSource() == search) {
+            String[] statuses = { "Available", "Booked", "Paid" };
+            
+            String status = (String) JOptionPane.showInputDialog(
+                jframe,
+                "Select status to filter:",
+                "Search by Status",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                statuses,
+                statuses[0]
+            );
+
+            if (status == null) return;
+
+            DefaultTableModel m = tableModel;
+            java.util.List<Object[]> matches = new java.util.ArrayList<>();
+            for (int i = 0; i < m.getRowCount(); i++) {
+                Object cell = m.getValueAt(i, 6); 
+                if (status.equals(cell)) {
+                    Object[] row = new Object[m.getColumnCount()];
+                    for (int c = 0; c < row.length; c++) row[c] = m.getValueAt(i, c);
+                    matches.add(row);
+                }
+            }
+
+            if (matches.isEmpty()) {
+                JOptionPane.showMessageDialog(jframe,
+                    "No cars found with status “" + status + "”.",
+                    "No Matches",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                return;
+            }
+
+            String[] cols = { "ID", "Model", "Price", "Type", "Brand", "Category", "Status" };
+            Object[][] data = matches.toArray(new Object[0][]);
+            JTable results = new JTable(data, cols);
+            results.setEnabled(false);
+            JScrollPane sp = new JScrollPane(results);
+            sp.setPreferredSize(new Dimension(600, 300));
+
+            JOptionPane.showMessageDialog(jframe,
+                sp,
+                "Cars with status “" + status + "”",
+                JOptionPane.INFORMATION_MESSAGE
+            );
+        }
+
 
         if (e.getSource() == delete) {
             String id = JOptionPane.showInputDialog(jframe, "Car ID to delete:");
