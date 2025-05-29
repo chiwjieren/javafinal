@@ -101,8 +101,8 @@ public class CustomerViewAvailableCars implements ActionListener{
                 Car car = Car.searchCar("cars.txt", id);
                 if (car.getStatus().equals("Available")) {
                     Car.addCar("booking.txt", car.getCarID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
-                    boolean ok = Car.delete("cars.txt", id);
-                    Car.updateStatus("booking.txt", id, "Booked");
+                    boolean ok = Car.updateStatus("cars.txt", id, "Booked");
+                    Car.addCar("payment.txt", car.getCarID(), Main.currentCustomerID, car.getCarPrice(), );
                 
 
                 
