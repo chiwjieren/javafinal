@@ -1,6 +1,4 @@
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.JOptionPane;
 
@@ -10,9 +8,6 @@ public class Sale {
     private String carID;
     private String amount;
     private String timestamp;
-
-    private static final DateTimeFormatter FMT =
-        DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public Sale(String saleID, String customerID, String carID, String amount, String timestamp) {
         this.saleID = saleID;
