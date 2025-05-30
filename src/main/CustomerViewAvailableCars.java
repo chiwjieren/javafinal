@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.awt.event.ActionEvent;
 
 
@@ -94,51 +95,55 @@ public class CustomerViewAvailableCars implements ActionListener{
 
         if (e.getSource() == book) {
             String id = JOptionPane.showInputDialog(jframe, "Car ID to book:");
-            if (id == null || id.isBlank()) return;  
-
+            if (id == null || id.isBlank()) return;
+        
             try {
-
                 Car car = Car.searchCar("cars.txt", id);
-                if (car.getStatus().equals("Available")) {
-                    Car.addCar("booking.txt", car.getCarID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
+        
+                if (car.getStatus().equalsIgnoreCase("Available")) {
+                    String bookingID = Book.getNextBookingID("booking.txt");
+                    Book.addBooking("booking.txt", bookingID, id, Main.currentCustomerID, "Booked", LocalDateTime.now());
                     boolean ok = Car.updateStatus("cars.txt", id, "Booked");
-                    Car.addCar("payment.txt", car.getCarID(), Main.currentCustomerID, car.getCarPrice(), );
-                
-
-                
-                if (ok) {
+                    
+                    try {
+                        Payment.addPayment("payment.txt", Payment.getNextPaymentID("payment.txt"), Main.currentCustomerID, car.getCarID(), car.getCarPrice(), "Pending", LocalDateTime.now());
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(jframe,
+                            "Warning: Payment record could not be created: " + ex.getMessage(),
+                            "Payment Warning",
+                            JOptionPane.WARNING_MESSAGE);
+                    }
+        
+                    if (ok) {
+                        JOptionPane.showMessageDialog(jframe,
+                            "Booked CarID: " + id + "\nBooking ID: " + bookingID + "\nAmount: RM" + car.getCarPrice(),
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(jframe,
+                            "Failed to update car status for: " + id,
+                            "Update Error",
+                            JOptionPane.WARNING_MESSAGE);
+                    }
+        
+                } else {
                     JOptionPane.showMessageDialog(jframe,
-                        "Booked CarID: " + id,
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
-                } 
-                
-                }
-                else {
-                    JOptionPane.showMessageDialog(jframe,
-                        "CarID not available: " + id,
+                        "This car is not available for booking.",
                         "Not Available",
                         JOptionPane.WARNING_MESSAGE);
                 }
-            }
-
-            catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(jframe,
-                    "Invalid ID format—no commas, quotes, or blanks allowed.",
-                    "Invalid Input",
-                    JOptionPane.ERROR_MESSAGE);
-            }
-
-            catch (IOException ex) {
+        
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(jframe,
                     "Could not book car. Please try again.",
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE);
             }
-
+        
             refreshTable();
         }
+        
            
     }
         

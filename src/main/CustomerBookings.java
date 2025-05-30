@@ -104,7 +104,7 @@ public class CustomerBookings implements ActionListener{
                 Car car = Car.searchCar("cars.txt", id);
                 if (car.getStatus().equals("Booked")) {
                     //add to sales.txt but the status got pending shud be after add to sales then considered paid dy
-                    Payment.addPayment("payment.txt", payment.getPaymentID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
+                    Payment.addPayment("payment.txt", Payment.getPaymentID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
                     boolean ok = Car.updateStatus("payment.txt", id, "Pending");
                 
 

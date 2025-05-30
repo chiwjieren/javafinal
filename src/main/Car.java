@@ -126,7 +126,7 @@ public class Car {
             while ((line = br.readLine()) != null) {
                 if (line.trim().isEmpty()) continue;
                 String[] parts = line.split(",", 7);
-                if (parts.length < 6) continue;
+                if (parts.length < 7) continue;
                 if (parts[0].equals(id)) {
                 String numeric = parts[2].replaceAll("[^0-9]", "");
                 int price = Integer.parseInt(numeric);
