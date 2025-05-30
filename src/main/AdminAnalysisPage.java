@@ -1,9 +1,8 @@
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.List;
 
@@ -64,7 +63,12 @@ public class AdminAnalysisPage implements ActionListener {
                 table.getColumnModel().getColumn(1).setPreferredWidth(120); 
                 table.getColumnModel().getColumn(2).setPreferredWidth(50);  
                 table.getColumnModel().getColumn(3).setPreferredWidth(300); 
-                table.getColumnModel().getColumn(4).setPreferredWidth(500); 
+                table.getColumnModel().getColumn(4).setPreferredWidth(300); 
+                
+                // Enable word wrap for the review and comment columns
+                table.getColumnModel().getColumn(3).setCellRenderer(new TextAreaRenderer());
+                table.getColumnModel().getColumn(4).setCellRenderer(new TextAreaRenderer());
+                
                 JScrollPane scrollPane = new JScrollPane(table);                
                 
                 double avgRating = Sale.calculateAverageRating();
@@ -82,7 +86,7 @@ public class AdminAnalysisPage implements ActionListener {
                 JButton btnBackToAnalysis = new JButton("Back");
 
                 JFrame feedbackFrame = new JFrame("Feedback Analysis");
-                feedbackFrame.setSize(900, 400);
+                feedbackFrame.setSize(1000, 500);  // Increased size to show more content
                 feedbackFrame.setLocationRelativeTo(frame);
                 feedbackFrame.setLayout(new BorderLayout(10, 10));
 
@@ -163,6 +167,29 @@ public class AdminAnalysisPage implements ActionListener {
                 "I/O Error: " + ex.getMessage(),
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    // Add this inner class for text wrapping in table cells
+    private static class TextAreaRenderer extends JTextArea implements TableCellRenderer {
+        public TextAreaRenderer() {
+            setLineWrap(true);
+            setWrapStyleWord(true);
+            setOpaque(true);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            if (isSelected) {
+                setForeground(table.getSelectionForeground());
+                setBackground(table.getSelectionBackground());
+            } else {
+                setForeground(table.getForeground());
+                setBackground(table.getBackground());
+            }
+            setText((value == null) ? "" : value.toString());
+            return this;
         }
     }
 }

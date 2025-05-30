@@ -1,6 +1,6 @@
 CAR001,Alphard,RM450000,MPV,Toyota,Luxury,Paid
 CAR002,Vios,RM85000,Sedan,Toyota,Affordable,Paid
-CAR003,Teana,RM120000,Sedan,Nissan,Affordable,Paid
+CAR003,Teana,RM120000,Sedan,Nissan,Affordable,Booked
 CAR004,Axia,RM41000,Hatchback,Perodua,Affordable,Paid
 CAR005,Camry,RM210000,Sedan,Toyota,Luxury,Paid
 CAR006,X5,RM430000,SUV,BMW,Luxury,Paid
@@ -10,9 +10,9 @@ CAR009,X50,RM95000,SUV,Proton,Affordable,Paid
 CAR010,X70,RM125000,SUV,Proton,Affordable,Paid
 CAR011,Model 3,RM250000,Sedan,Tesla,Luxury,Paid
 CAR012,Tucson,RM135000,SUV,Hyundai,Affordable,Paid
-CAR013,City,RM98000,Sedan,Honda,Affordable,Paid
-CAR014,C-Class,RM320000,Sedan,Mercedes-Benz,Luxury,Available
-CAR015,A6,RM350000,Sedan,Audi,Luxury,Booked
+CAR013,City,RM98000,Sedan,Honda,Affordable,Available
+CAR014,C-Class,RM320000,Sedan,Mercedes-Benz,Luxury,Paid
+CAR015,A6,RM350000,Sedan,Audi,Luxury,Available
 CAR016,Corolla Altis,RM135000,Sedan,Toyota,Affordable,Available
 CAR017,Triton,RM125000,Pickup,Mitsubishi,Affordable,Available
 CAR018,Ranger,RM148000,Pickup,Ford,Affordable,Available

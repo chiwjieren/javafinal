@@ -1,3 +1,5 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
@@ -22,7 +24,14 @@ public class Analysis {
 
     public static double averageRating(List<Sale> sales) {
         return sales.stream()
-                    .mapToInt(Sale::getRating)
+                    .mapToInt(s -> {
+                        String rating = s.getRating();
+                        try {
+                            return Integer.parseInt(rating.split(" ")[0]);
+                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                            return 0;
+                        }
+                    })
                     .average()
                     .orElse(0.0);
     }
@@ -30,51 +39,68 @@ public class Analysis {
     public static Map<Integer,Long> ratingDistribution(List<Sale> sales) {
         return sales.stream()
                     .collect(Collectors.groupingBy(
-                       Sale::getRating,
-                       Collectors.counting()
+                        s -> {
+                            String rating = s.getRating();
+                            try {
+                                return Integer.parseInt(rating.split(" ")[0]);
+                            } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                                return 0;
+                            }
+                        },
+                        Collectors.counting()
                     ));
     }
 
     public static List<Sale> lowRatedSales(List<Sale> sales, int threshold) {
         return sales.stream()
-                    .filter(s -> s.getRating() <= threshold)
+                    .filter(s -> {
+                        String rating = s.getRating();
+                        try {
+                            return Integer.parseInt(rating.split(" ")[0]) <= threshold;
+                        } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
+                            return false;
+                        }
+                    })
                     .collect(Collectors.toList());
     }
 
     public static Map<String, Long> topSellingBrands(List<Sale> sales, int topN) {
-        return sales.stream()
-            .collect(Collectors.groupingBy(
-                Sale::getCarID,         
-                Collectors.counting()
-            ))
-            .entrySet().stream()
-            .collect(Collectors.groupingBy(
-                e -> {
-                    return sales.stream()
-                                .filter(s -> s.getCarID().equals(e.getKey()))
-                                .findFirst()
-                                .map(Sale::getCarID) 
-                                .map(carID -> {
-                                    try {
-                                        return Car.searchCar("cars.txt", carID).getCarBrand();
-                                    } catch (IOException ex) {
-                                        return "Unknown";
-                                    }
-                                })
-                                .orElse("Unknown");
-                },
-                Collectors.summingLong(Map.Entry::getValue)
-            ))
-            .entrySet().stream()
-            .sorted(Map.Entry.<String,Long>comparingByValue(Comparator.reverseOrder()))
+        Map<String, Long> brandCounts = new HashMap<>();
+        
+        try (BufferedReader br = new BufferedReader(new FileReader("sales.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",");
+                if (parts.length >= 4) {
+                    String carID = parts[3];
+                    try {
+                        Car car = Car.searchCar("cars.txt", carID);
+                        if (car != null) {
+                            String brand = car.getCarBrand();
+                            brandCounts.merge(brand, 1L, Long::sum);
+                        }
+                    } catch (IOException ex) {
+                        System.err.println("Error looking up car " + carID + ": " + ex.getMessage());
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return brandCounts;
+        }
+
+        return brandCounts.entrySet().stream()
+            .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
             .limit(topN)
             .collect(Collectors.toMap(
                 Map.Entry::getKey,
                 Map.Entry::getValue,
-                (a,b)->a,
+                (e1, e2) -> e1,
                 LinkedHashMap::new
             ));
-    }    
+    }
 
     public static Map<LocalDate, Double> dailyRevenue(List<Payment> payments) {
         return payments.stream()

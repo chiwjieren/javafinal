@@ -2,6 +2,7 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import javax.swing.JOptionPane;
 
 public class Sale {
     private String saleID;
@@ -186,5 +187,54 @@ public class Sale {
             tmp.delete();
         }
         return removed;
+    }
+
+    public static void showBestSellingBrands() {
+        try {
+            // Map to store brand counts
+            java.util.Map<String, Integer> brandCounts = new java.util.HashMap<>();
+            
+            // Read sales.txt to get car IDs
+            try (BufferedReader br = new BufferedReader(new FileReader("sales.txt"))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    line = line.trim();
+                    if (line.isEmpty()) continue;
+                    String[] parts = line.split(",");
+                    if (parts.length >= 4) {
+                        String carID = parts[3];
+                        // Get car details from cars.txt
+                        Car car = Car.searchCar("cars.txt", carID);
+                        if (car != null) {
+                            String brand = car.getCarBrand();
+                            brandCounts.put(brand, brandCounts.getOrDefault(brand, 0) + 1);
+                        }
+                    }
+                }
+            }
+
+            // Sort brands by sales count
+            java.util.List<java.util.Map.Entry<String, Integer>> sortedBrands = 
+                new java.util.ArrayList<>(brandCounts.entrySet());
+            sortedBrands.sort((a, b) -> b.getValue().compareTo(a.getValue()));
+
+            // Create message
+            StringBuilder message = new StringBuilder("Best Selling Brands:\n\n");
+            for (java.util.Map.Entry<String, Integer> entry : sortedBrands) {
+                message.append(entry.getKey()).append(": ").append(entry.getValue()).append(" sales\n");
+            }
+
+            // Show dialog
+            JOptionPane.showMessageDialog(null,
+                message.toString(),
+                "Best Selling Brands",
+                JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null,
+                "Error analyzing sales data: " + ex.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

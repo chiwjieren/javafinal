@@ -61,16 +61,10 @@ public class CustomerReview implements ActionListener {
         model.setRowCount(0);
         try (BufferedReader br = new BufferedReader(new FileReader("customerreview.txt"))) {
             String line;
-            boolean isFirstLine = true;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
                 
-                if (isFirstLine) {
-                    isFirstLine = false;
-                    continue;
-                }
-
                 String[] parts = line.split(",", 4);
                 if (parts.length < 4) continue;
                 

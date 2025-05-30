@@ -20,7 +20,7 @@ public class SalesmanPage implements ActionListener{
         viewCars = new Button("All Cars");
         collectPayment = new Button("Collect Payment");
         viewSales = new Button("Sales");
-        review = new Button("Review");
+        review = new Button("Comment");
         logout = new Button("Logout");
 
         editProfile.addActionListener(this);
