@@ -141,7 +141,7 @@ public class SalesmanCollectPayment implements ActionListener {
                         customerID,
                         Main.currentSalesmanID,
                         carID,
-                        now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                        now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
                     ));
                 }
 
@@ -182,20 +182,10 @@ public class SalesmanCollectPayment implements ActionListener {
                     }
                 }
 
-                List<String> carLines = new ArrayList<>();
-                try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        if (!line.startsWith(carID + ",")) {
-                            carLines.add(line);
-                        }
-                    }
-                }
-
-                try (PrintWriter writer = new PrintWriter(new FileWriter("cars.txt"))) {
-                    for (String line : carLines) {
-                        writer.println(line);
-                    }
+                Car car = Car.searchCar("cars.txt", carID);
+                if (car != null) {
+                    car.setStatus("Paid");
+                    Car.updateStatus("cars.txt", carID, "Paid");
                 }
 
                 JOptionPane.showMessageDialog(frame,

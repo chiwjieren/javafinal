@@ -32,7 +32,7 @@ public class CustomerViewHistory implements ActionListener {
         frame.add(new JScrollPane(table), BorderLayout.CENTER);
 
         JPanel btnPanel = new JPanel(new GridLayout(1,2,10,5));
-        btnReview = new JButton("Add Review");
+        btnReview = new JButton("Add Review & Rating");
         btnBack = new JButton("Back");
 
         btnReview.addActionListener(this);
@@ -74,26 +74,31 @@ public class CustomerViewHistory implements ActionListener {
         }
     }
 
-    private void saveReview(String saleID, String review) {
+    private void saveReviewAndRating(String saleID, String review, String rating) {
         try {
+            // Save review
             File reviewFile = new File("customerreview.txt");
-            
-            
             try (BufferedWriter bw = new BufferedWriter(new FileWriter(reviewFile, true))) {
-                
                 String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
                 bw.write(saleID + "," + Main.currentCustomerID + "," + review + "," + timestamp + "\n");
             }
+
+            // Save rating
+            File ratingFile = new File("customerratings.txt");
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(ratingFile, true))) {
+                String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+                bw.write(saleID + "," + rating + "," + timestamp + "\n");
+            }
             
             JOptionPane.showMessageDialog(frame,
-                "Review saved successfully!",
+                "Review and rating saved successfully!",
                 "Success",
                 JOptionPane.INFORMATION_MESSAGE);
                 
         } catch (IOException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(frame,
-                "Error saving review: " + ex.getMessage(),
+                "Error saving review and rating: " + ex.getMessage(),
                 "I/O Error",
                 JOptionPane.ERROR_MESSAGE);
         }
@@ -129,7 +134,19 @@ public class CustomerViewHistory implements ActionListener {
             String review = JOptionPane.showInputDialog(frame, "Enter your review:");
             if (review == null || review.isBlank()) return;
 
-            saveReview(saleID, review);
+            String[] ratings = {"1", "2", "3", "4", "5"};
+            String rating = (String) JOptionPane.showInputDialog(
+                frame,
+                "Select your rating:",
+                "Rating",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                ratings,
+                ratings[4]
+            );
+            if (rating == null) return;
+
+            saveReviewAndRating(saleID, review, rating);
         }
     }
 } 

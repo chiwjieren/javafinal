@@ -313,9 +313,7 @@ public class Car {
             if (!in.delete() || !tmp.renameTo(in)) {
                 throw new IOException("Could not replace cars file");
             }
-        } 
-        
-        else {
+        } else {
             tmp.delete();
         }
         

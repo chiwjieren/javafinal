@@ -8,99 +8,60 @@ import javax.swing.JOptionPane;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, History, Logout, Bookings, Review, editProfile;
+    Button editProfile, viewCars, affordableCars, localCars, luxuryCars, History, Review, Bookings, logout;
 
     public static CustomerViewAvailableCars viewAvailableCars;
     public static CustomerBookings viewBookings;
 
     public CustomerPage() {
-        jframe = new JFrame();
+        jframe = new JFrame("Customer Page");
         jframe.setSize(500,500);
-        jframe.setLocation(500,200);
+        jframe.setLocation(400,100);
 
-        AvailableCars = new Button("View Available Cars");
-        AffordableCars = new Button("Affordable Cars");
-        LocalCars = new Button("Local Cars");
-        LuxuryCars = new Button("Luxury Cars");
-        History = new Button("History");
-        Logout = new Button("Logout");
-        Bookings = new Button("Bookings");
-        Review = new Button("Review");
         editProfile = new Button("Edit Profile");
+        viewCars = new Button("All Cars");
+        affordableCars = new Button("Affordable Cars");
+        localCars = new Button("Local Cars");
+        luxuryCars = new Button("Luxury Cars");
+        History = new Button("History");
+        Review = new Button("Review");
+        Bookings = new Button("Bookings");
+        logout = new Button("Logout");
 
-        AvailableCars.addActionListener(this);
-        AffordableCars.addActionListener(this);
-        LocalCars.addActionListener(this);
-        LuxuryCars.addActionListener(this);
-        History.addActionListener(this);
-        Logout.addActionListener(this);
-        Bookings.addActionListener(this);
-        Review.addActionListener(this);
         editProfile.addActionListener(this);
+        viewCars.addActionListener(this);
+        affordableCars.addActionListener(this);
+        localCars.addActionListener(this);
+        luxuryCars.addActionListener(this);
+        History.addActionListener(this);
+        Review.addActionListener(this);
+        Bookings.addActionListener(this);
+        logout.addActionListener(this);
 
-        jframe.setLayout(new GridLayout(6,1,5,5));
-        jframe.add(AvailableCars);
-        jframe.add(AffordableCars);
-        jframe.add(LocalCars);
-        jframe.add(LuxuryCars);
-        jframe.add(History);
-        jframe.add(Logout);
-        jframe.add(Bookings);
-        jframe.add(Review);
+        jframe.setLayout(new GridLayout(6,2,5,5));
         jframe.add(editProfile);
+        jframe.add(viewCars);
+        jframe.add(affordableCars);
+        jframe.add(localCars);
+        jframe.add(luxuryCars);
+        jframe.add(History);
+        jframe.add(Review);
+        jframe.add(Bookings);
+        jframe.add(logout);
 
         jframe.setVisible(true);
     }
 
     public JFrame getFrame() { return jframe; }
 
-
     @Override
     public void actionPerformed(ActionEvent e) {
         jframe.setVisible(false);
 
-        if (e.getSource() == AvailableCars) {
-            viewAvailableCars = new CustomerViewAvailableCars(this);
-        }    
-
-        else if (e.getSource() == AffordableCars) {
-            new CustomerAffordableCars(this);
-        }
-
-        else if (e.getSource() == LocalCars) {
-            new CustomerViewLocalCars(this);
-        }
-        
-        else if (e.getSource() == LuxuryCars) {
-            new CustomerViewLuxuryCars(this);
-        }
-
-        
-        else if (e.getSource() == History) {
-            new CustomerViewHistory(this);
-        }
-
-        else if (e.getSource() == Logout) {
-            Main.first = new Page1();
-        }
-
-        else if (e.getSource() == Bookings) {
-            viewBookings = new CustomerBookings(this);
-        }
-
-        else if (e.getSource() == Review) {
-            new CustomerReview(this);
-        }
-
-
         if (e.getSource() == editProfile) {
-
             try {
                 new CustomerEditProfile(this, Main.currentCustomerID);
-            } 
-
-             
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(jframe,
                     "Could not load profile: " + ex.getMessage(),
@@ -108,8 +69,30 @@ public class CustomerPage implements ActionListener {
                     JOptionPane.ERROR_MESSAGE);
                 jframe.setVisible(true);
             }
- 
         }
-    
+        else if (e.getSource() == viewCars) {
+            new CustomerViewAvailableCars(this);
+        }
+        else if (e.getSource() == affordableCars) {
+            new CustomerViewAffordableCars(this);
+        }
+        else if (e.getSource() == localCars) {
+            new CustomerViewLocalCars(this);
+        }
+        else if (e.getSource() == luxuryCars) {
+            new CustomerViewLuxuryCars(this);
+        }
+        else if (e.getSource() == History) {
+            new CustomerViewHistory(this);
+        }
+        else if (e.getSource() == Review) {
+            new CustomerReview(this);
+        }
+        else if (e.getSource() == Bookings) {
+            new CustomerBookings(this);
+        }
+        else if (e.getSource() == logout) {
+            new Page1();
+        }
     }
 }

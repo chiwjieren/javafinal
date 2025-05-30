@@ -113,10 +113,9 @@ public class AdminManageCustomer implements ActionListener{
 
                     if (f[1].equals(id)) {  
                         sb.append("• SaleID: ").append(f[0])
-                          .append(" | Salesman: ").append(f[2])
+                          .append(" | Salesman: ").append(f[1])
                           .append(" | Car: ").append(f[3])
-                          .append(" | Date: ").append(f[4])
-                          .append(" | Rating: ").append(f[5]).append("\n");
+                          .append(" | Date: ").append(f[4]);
                         anySale = true;
                     }
                 }

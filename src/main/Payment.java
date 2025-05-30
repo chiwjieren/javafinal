@@ -62,7 +62,7 @@ public class Payment {
     }
 
     public static Payment getPayment(String line) {
-        String[] f = line.split(",", 5);
+        String[] f = line.split(",", 6);
         return new Payment(f[0], f[1], f[2], Integer.parseInt(f[3].replaceAll("[^0-9.]", "")), LocalDateTime.parse(f[4], FMT), f[5]);
     }
 

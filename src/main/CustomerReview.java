@@ -19,7 +19,7 @@ public class CustomerReview implements ActionListener {
         frame.setLocationRelativeTo(customerPage.getFrame());
         frame.setLayout(new BorderLayout(10,10));
 
-        String[] cols = { "Sale ID", "Customer ID", "Review", "Timestamp" };
+        String[] cols = { "Sale ID", "Customer ID", "Review", "Rating", "Timestamp" };
         model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
@@ -40,6 +40,23 @@ public class CustomerReview implements ActionListener {
         customerPage.getFrame().setVisible(false);
     }
 
+    private String getRating(String saleID) {
+        try (BufferedReader br = new BufferedReader(new FileReader("customerratings.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 3);
+                if (parts.length >= 2 && parts[0].equals(saleID)) {
+                    return parts[1] + " stars";
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return "No rating"
+        }
+        return "No rating";
+    }
+
     private void refreshTable() {
         model.setRowCount(0);
         try (BufferedReader br = new BufferedReader(new FileReader("customerreview.txt"))) {
@@ -57,10 +74,13 @@ public class CustomerReview implements ActionListener {
                 String[] parts = line.split(",", 4);
                 if (parts.length < 4) continue;
                 
+                String rating = getRating(parts[0]);
+                
                 model.addRow(new Object[]{
                     parts[0],  // Sale ID
                     parts[1],  // Customer ID
                     parts[2],  // Review
+                    rating,    // Rating
                     parts[3]   // Timestamp
                 });
             }

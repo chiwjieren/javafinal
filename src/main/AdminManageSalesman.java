@@ -161,8 +161,7 @@ public class AdminManageSalesman implements ActionListener{
                         sb.append("• SaleID: ").append(f[0])
                         .append(" | Customer: ").append(f[1])
                         .append(" | Car: ").append(f[3])
-                        .append(" | Date: ").append(f[4])
-                        .append(" | Rating: ").append(f[5]).append("\n");
+                        .append(" | Date: ").append(f[4]);
                         anySale = true;
                     }
                 }

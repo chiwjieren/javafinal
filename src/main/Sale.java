@@ -4,77 +4,162 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Sale {
-    private String salesID;
+    private String saleID;
     private String customerID;
-    private String salesmanID;
     private String carID;
-    private LocalDateTime timestamp;
-    private int rating;
-    private String customerReview;
-    private String salesmanComment;
+    private String amount;
+    private String timestamp;
 
     private static final DateTimeFormatter FMT =
         DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-    public Sale(String salesID, String customerID, String salesmanID,
-                String carID, LocalDateTime timestamp, int rating,
-                String customerReview, String salesmanComment) {
-        this.salesID         = salesID;
-        this.customerID      = customerID;
-        this.salesmanID      = salesmanID;
-        this.carID           = carID;
-        this.timestamp       = timestamp;
-        this.rating          = rating;
-        this.customerReview  = customerReview;
-        this.salesmanComment = salesmanComment;
+    public Sale(String saleID, String customerID, String carID, String amount, String timestamp) {
+        this.saleID = saleID;
+        this.customerID = customerID;
+        this.carID = carID;
+        this.amount = amount;
+        this.timestamp = timestamp;
     }
 
-    public String getSalesID()          { return salesID; }
-    public String getCustomerID()       { return customerID; }
-    public String getSalesmanID()       { return salesmanID; }
-    public String getCarID()            { return carID; }
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public int getRating()              { return rating; }
-    public String getCustomerReview()   { return customerReview; }
-    public String getSalesmanComment()  { return salesmanComment; }
+    public String getSaleID() { return saleID; }
+    public String getCustomerID() { return customerID; }
+    public String getCarID() { return carID; }
+    public String getAmount() { return amount; }
+    public String getTimestamp() { return timestamp; }
 
-    public static Sale getSale(String line) {
-        String[] f = line.split(",", 8);
-        return new Sale(
-            f[0], f[1], f[2], f[3],
-            LocalDateTime.parse(f[4], FMT),
-            Integer.parseInt(f[5]),
-            f[6], f[7]
-        );
+    public String getRating() {
+        try (BufferedReader br = new BufferedReader(new FileReader("customerratings.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 3);
+                if (parts.length >= 2 && parts[0].equals(saleID)) {
+                    return parts[1] + " stars";
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return "No rating"
+        }
+        return "No rating";
+    }
+
+    public String getCustomerReview() {
+        try (BufferedReader br = new BufferedReader(new FileReader("customerreview.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 4);
+                if (parts.length >= 4 && parts[0].equals(saleID)) {
+                    return parts[2];
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return "No review"
+        }
+        return "No review";
+    }
+
+    public String getSalesmanComment() {
+        try (BufferedReader br = new BufferedReader(new FileReader("salesmancomment.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 4);
+                if (parts.length >= 4 && parts[0].equals(saleID)) {
+                    return parts[2];
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return "No comment"
+        }
+        return "No comment";
     }
 
     public static List<Sale> loadAll(String filename) throws IOException {
-        List<Sale> list = new ArrayList<>();
+        List<Sale> sales = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String line;
             while ((line = br.readLine()) != null) {
-                if (!line.isBlank()) list.add(getSale(line));
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 5);
+                if (parts.length >= 5) {
+                    sales.add(new Sale(parts[0], parts[1], parts[2], parts[3], parts[4]));
+                }
             }
         }
-        return list;
+        return sales;
+    }
+
+    public static double calculateAverageRating() {
+        double total = 0;
+        int count = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader("customerratings.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 3);
+                if (parts.length >= 2) {
+                    try {
+                        total += Integer.parseInt(parts[1]);
+                        count++;
+                    } catch (NumberFormatException ex) {
+                        // Skip invalid ratings
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return 0
+        }
+        return count > 0 ? total / count : 0;
+    }
+
+    public static Map<Integer, Long> calculateRatingDistribution() {
+        Map<Integer, Long> distribution = new HashMap<>();
+        for (int i = 1; i <= 5; i++) {
+            distribution.put(i, 0L);
+        }
+
+        try (BufferedReader br = new BufferedReader(new FileReader("customerratings.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] parts = line.split(",", 3);
+                if (parts.length >= 2) {
+                    try {
+                        int rating = Integer.parseInt(parts[1]);
+                        if (rating >= 1 && rating <= 5) {
+                            distribution.put(rating, distribution.get(rating) + 1);
+                        }
+                    } catch (NumberFormatException ex) {
+                        // Skip invalid ratings
+                    }
+                }
+            }
+        } catch (IOException ex) {
+            // If file doesn't exist or can't be read, return empty distribution
+        }
+        return distribution;
     }
 
     public void save(String filename) throws IOException {
         try (PrintWriter out = new PrintWriter(new FileWriter(filename, true))) {
             out.println(String.join(",",
-                salesID,
+                saleID,
                 customerID,
-                salesmanID,
                 carID,
-                timestamp.format(FMT),
-                Integer.toString(rating),
-                customerReview,
-                salesmanComment
+                amount,
+                timestamp
             ));
         }
     }
 
-    public static boolean delete(String filename, String salesID) throws IOException {
+    public static boolean delete(String filename, String saleID) throws IOException {
         File in  = new File(filename);
         File tmp = new File(in.getParent(), "sales.tmp");
         boolean removed = false;
@@ -85,11 +170,9 @@ public class Sale {
             String line;
             
             while ((line = r.readLine()) != null) {
-
-                if (line.startsWith(salesID + ",")) {
+                if (line.startsWith(saleID + ",")) {
                     removed = true;
                 } 
-                
                 else {
                     w.println(line);
                 }
@@ -99,7 +182,6 @@ public class Sale {
             if (!in.delete() || !tmp.renameTo(in))
                 throw new IOException("Could not replace sales file");
         } 
-        
         else {
             tmp.delete();
         }

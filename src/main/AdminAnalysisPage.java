@@ -1,9 +1,11 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
-import java.util.List;
+import java.io.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import java.util.List;
 
 public class AdminAnalysisPage implements ActionListener {
     private JFrame frame;
@@ -34,9 +36,8 @@ public class AdminAnalysisPage implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-
             if (e.getSource() == btnFeedback) {
-                frame.setVisible(false); 
+                frame.setVisible(false);
 
                 List<Sale> sales = Sale.loadAll("sales.txt");
 
@@ -48,12 +49,12 @@ public class AdminAnalysisPage implements ActionListener {
                 Object[][] data = new Object[sales.size()][cols.length];
 
                 for (int i = 0; i < sales.size(); i++) {
-                    Sale s = sales.get(i);
-                    data[i][0] = s.getSalesID();
-                    data[i][1] = s.getTimestamp().toString();
-                    data[i][2] = s.getRating();
-                    data[i][3] = s.getCustomerReview();
-                    data[i][4] = s.getSalesmanComment();
+                    Sale sale = sales.get(i);
+                    data[i][0] = sale.getSaleID();
+                    data[i][1] = sale.getTimestamp();
+                    data[i][2] = sale.getRating();
+                    data[i][3] = sale.getCustomerReview();
+                    data[i][4] = sale.getSalesmanComment();
                 }
 
                 JTable table = new JTable(data, cols);
@@ -66,11 +67,10 @@ public class AdminAnalysisPage implements ActionListener {
                 table.getColumnModel().getColumn(4).setPreferredWidth(500); 
                 JScrollPane scrollPane = new JScrollPane(table);                
                 
-                double avgRating = Analysis.averageRating(sales);
-                Map<Integer, Long> dist = Analysis.ratingDistribution(sales);
+                double avgRating = Sale.calculateAverageRating();
+                Map<Integer, Long> dist = Sale.calculateRatingDistribution();
 
                 StringBuilder ratingBreakdown = new StringBuilder();
-
                 for (int i = 1; i <= 5; i++) {
                     long count = dist.getOrDefault(i, 0L);
                     ratingBreakdown.append(String.format("Rating %d: %d    ", i, count));
