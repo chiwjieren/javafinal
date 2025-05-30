@@ -102,7 +102,7 @@ public class CustomerViewAvailableCars implements ActionListener{
         
                 if (car.getStatus().equalsIgnoreCase("Available")) {
                     String bookingID = Book.getNextBookingID("booking.txt");
-                    Book.addBooking("booking.txt", bookingID, id, Main.currentCustomerID, "Booked", LocalDateTime.now());
+                    Book.addBooking("booking.txt", bookingID, id, Main.currentCustomerID, LocalDateTime.now());
                     boolean ok = Car.updateStatus("cars.txt", id, "Booked");
                     
                     try {

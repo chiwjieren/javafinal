@@ -13,7 +13,6 @@ public class Book {
     private String bookingID;
     private String carID;
     private String customerID;
-    private String status;
     private LocalDateTime timestamp;
 
     private static final DateTimeFormatter FMT =
@@ -44,23 +43,21 @@ public class Book {
         return String.format("B%04d", num + 1);
     }
 
-    public Book(String bookingID, String carID, String customerID, String status, LocalDateTime timestamp) {
+    public Book(String bookingID, String carID, String customerID, LocalDateTime timestamp) {
         this.bookingID = bookingID;
         this.carID = carID;
         this.customerID = customerID;
-        this.status = status;
         this.timestamp = timestamp;
     }
 
     public String getBookingID() { return bookingID; }
     public String getCarID() { return carID; }
     public String getCustomerID() { return customerID; }
-    public String getStatus() { return status; }
     public LocalDateTime getTimestamp() { return timestamp; }
 
     public static Book getBooking(String line) {
         String[] f = line.split(",", 5);
-        return new Book(f[0], f[1], f[2], f[3], LocalDateTime.parse(f[4], FMT));
+        return new Book(f[0], f[1], f[2], LocalDateTime.parse(f[4], FMT));
     }
 
     public static List<Book> loadAll(String filename) throws IOException {
@@ -76,9 +73,9 @@ public class Book {
         return list;
     }
     
-    public static void addBooking(String filename, String bookingID, String carID, String customerID, String status, LocalDateTime timestamp) throws IOException {
+    public static void addBooking(String filename, String bookingID, String carID, String customerID, LocalDateTime timestamp) throws IOException {
         try (PrintWriter out = new PrintWriter(new FileWriter(filename, true))) {
-            out.println(String.join(",", bookingID, carID, customerID, status, timestamp.format(FMT)));
+            out.println(String.join(",", bookingID, carID, customerID, timestamp.format(FMT)));
         }
     }
     
