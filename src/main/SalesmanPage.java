@@ -66,11 +66,11 @@ public class SalesmanPage implements ActionListener{
         }
 
         else if (e.getSource() == collectPayment) {
-
+            new SalesmanCollectPayment(this);
         }
 
         else if (e.getSource() == viewSales) {
-
+            new SalesmanViewSales(this);
         }
 
         else if (e.getSource() == logout) {

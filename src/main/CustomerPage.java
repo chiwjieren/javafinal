@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout, Bookings, editProfile;
+    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, History, Logout, Bookings, editProfile;
 
     public static CustomerViewAvailableCars viewAvailableCars;
     public static CustomerBookings viewBookings;
@@ -22,7 +22,6 @@ public class CustomerPage implements ActionListener {
         AffordableCars = new Button("Affordable Cars");
         LocalCars = new Button("Local Cars");
         LuxuryCars = new Button("Luxury Cars");
-        FindCar = new Button("Find Car");
         History = new Button("History");
         Logout = new Button("Logout");
         Bookings = new Button("Bookings");
@@ -32,7 +31,6 @@ public class CustomerPage implements ActionListener {
         AffordableCars.addActionListener(this);
         LocalCars.addActionListener(this);
         LuxuryCars.addActionListener(this);
-        FindCar.addActionListener(this);
         History.addActionListener(this);
         Logout.addActionListener(this);
         Bookings.addActionListener(this);
@@ -43,7 +41,6 @@ public class CustomerPage implements ActionListener {
         jframe.add(AffordableCars);
         jframe.add(LocalCars);
         jframe.add(LuxuryCars);
-        jframe.add(FindCar);
         jframe.add(History);
         jframe.add(Logout);
         jframe.add(Bookings);
@@ -64,24 +61,20 @@ public class CustomerPage implements ActionListener {
         }    
 
         else if (e.getSource() == AffordableCars) {
-            //ViewAffordableCars = new CustomerAffordableCars(this);
-
+            new CustomerAffordableCars(this);
         }
 
         else if (e.getSource() == LocalCars) {
-            //ViewLocalCars = new CustomerLocalCars(this);
+            new CustomerViewLocalCars(this);
         }
         
         else if (e.getSource() == LuxuryCars) {
-            //ViewLuxuryCars = new CustomerLuxuryCars(this);
+            new CustomerViewLuxuryCars(this);
         }
 
-        else if (e.getSource() == FindCar) {
-            //FindCarFilter = new CustomerFindCar(this);
-        }
         
         else if (e.getSource() == History) {
-            //ViewHistory = new CustomerHistory(this);
+            new CustomerViewHistory(this);
         }
 
         else if (e.getSource() == Logout) {

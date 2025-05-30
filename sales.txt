@@ -9,4 +9,6 @@ SA008,C0008,S0003,CAR008,2025-05-28 16:30:00,2,Not impressed.,Customer felt the 
 SA009,C0009,S0004,CAR009,2025-05-29 10:10:00,5,Great value!,Customer happy with price match and added free first‐service package.
 SA010,C0010,S0005,CAR010,2025-05-29 12:00:00,4,Smooth transaction.,Financing approval was quick; documentation handed over without hiccups.
 SA011,C0011,S0001,CAR011,2025-05-30 09:00:00,5,Loved the test drive!,Customer enthusiastic about electric range and premium sound system.
-SA012,C0012,S0002,CAR012,2025-05-30 11:30:00,3,Could improve speed.,Customer wanted more acceleration data but left pleased with friendliness of staff.
+SA012,C0012,S0002,CAR012,2025-05-30 11:30:00,3,Could improve speed.,Customer wanted more acceleration data but left pleased with friendliness of staff.SA013,C0001,S0001,CAR013,2025-05-30 14:20:09,0,,
+SA013,C0001,S0001,CAR014,2025-05-30 14:37:57,0,,
+SA014,C0001,S0001,CAR013,2025-05-30 14:41:25,0,,
