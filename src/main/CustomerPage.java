@@ -11,6 +11,7 @@ public class CustomerPage implements ActionListener {
     Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, FindCar, History, Logout, Bookings, editProfile;
 
     public static CustomerViewAvailableCars viewAvailableCars;
+    public static CustomerBookings viewBookings;
 
     public CustomerPage() {
         jframe = new JFrame();
@@ -88,7 +89,7 @@ public class CustomerPage implements ActionListener {
         }
 
         else if (e.getSource() == Bookings) {
-            //ViewBookings = new CustomerBookings(this);
+            viewBookings = new CustomerBookings(this);
         }
 
         if (e.getSource() == editProfile) {

@@ -128,8 +128,26 @@ public class Car {
                 String[] parts = line.split(",", 7);
                 if (parts.length < 7) continue;
                 if (parts[0].equals(id)) {
-                String numeric = parts[2].replaceAll("[^0-9]", "");
-                int price = Integer.parseInt(numeric);
+                    String numeric = parts[2].replaceAll("[^0-9]", "");
+                    int price = Integer.parseInt(numeric);
+                    return new Car(parts[0], parts[1], price,
+                                   parts[3], parts[4], parts[5], parts[6]);
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Car searchCarByModel(String filename, String model) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                if (line.trim().isEmpty()) continue;
+                String[] parts = line.split(",", 7);
+                if (parts.length < 7) continue;
+                if (parts[1].equals(model)) {
+                    String numeric = parts[2].replaceAll("[^0-9]", "");
+                    int price = Integer.parseInt(numeric);
                     return new Car(parts[0], parts[1], price,
                                    parts[3], parts[4], parts[5], parts[6]);
                 }

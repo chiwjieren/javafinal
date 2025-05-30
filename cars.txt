@@ -10,8 +10,8 @@ CAR009,X50,RM95000,SUV,Proton,Affordable,Paid
 CAR010,X70,RM125000,SUV,Proton,Affordable,Paid
 CAR011,Model 3,RM250000,Sedan,Tesla,Luxury,Paid
 CAR012,Tucson,RM135000,SUV,Hyundai,Affordable,Paid
-CAR013,City,RM98000,Sedan,Honda,Affordable,Available
-CAR014,C-Class,RM320000,Sedan,Mercedes-Benz,Luxury,Available
+CAR013,City,RM98000,Sedan,Honda,Affordable,Booked
+CAR014,C-Class,RM320000,Sedan,Mercedes-Benz,Luxury,Booked
 CAR015,A6,RM350000,Sedan,Audi,Luxury,Available
 CAR016,Corolla Altis,RM135000,Sedan,Toyota,Affordable,Available
 CAR017,Triton,RM125000,Pickup,Mitsubishi,Affordable,Available

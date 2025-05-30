@@ -102,17 +102,9 @@ public class CustomerViewAvailableCars implements ActionListener{
         
                 if (car.getStatus().equalsIgnoreCase("Available")) {
                     String bookingID = Book.getNextBookingID("booking.txt");
-                    Book.addBooking("booking.txt", bookingID, id, Main.currentCustomerID, LocalDateTime.now());
+                    Book.addBooking("booking.txt", bookingID, id, Main.currentCustomerID, "Booked", LocalDateTime.now());
                     boolean ok = Car.updateStatus("cars.txt", id, "Booked");
                     
-                    try {
-                        Payment.addPayment("payment.txt", Payment.getNextPaymentID("payment.txt"), Main.currentCustomerID, car.getCarID(), car.getCarPrice(), "Pending", LocalDateTime.now());
-                    } catch (IOException ex) {
-                        JOptionPane.showMessageDialog(jframe,
-                            "Warning: Payment record could not be created: " + ex.getMessage(),
-                            "Payment Warning",
-                            JOptionPane.WARNING_MESSAGE);
-                    }
         
                     if (ok) {
                         JOptionPane.showMessageDialog(jframe,

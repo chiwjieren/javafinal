@@ -11,8 +11,8 @@ import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.awt.event.ActionEvent;
-
 
 public class CustomerBookings implements ActionListener{
     JFrame jframe;
@@ -34,8 +34,7 @@ public class CustomerBookings implements ActionListener{
         jframe.setSize(500,500);
         jframe.setLocation(500,200);
         
-
-        String[] columnNames = {"ID", "Car Model", "Car Price", "Car Type", "Car Brand", "Car Category"};
+        String[] columnNames = {"ID", "Car ID", "Car Price","Status"};
         tableModel = new DefaultTableModel(columnNames, 0){
             @Override
             public boolean isCellEditable(int row, int column){
@@ -43,8 +42,6 @@ public class CustomerBookings implements ActionListener{
             }
         };
         jtable = new JTable(tableModel);
-        
-
         
         jframe.add(new JScrollPane(jtable), BorderLayout.CENTER);
 
@@ -68,24 +65,68 @@ public class CustomerBookings implements ActionListener{
         jframe.setVisible(true);
     }
     
-
     private void refreshTable() {
         tableModel.setRowCount(0);
 
-        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("booking.txt"))) {
             String line;
 
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                String[] parts = line.split(",", 7);
-                if (parts.length < 7) continue;
-                if (parts[6].equals("Booked")) {
-                    tableModel.addRow(parts);
+                String[] parts = line.split(",", 5);
+                if (parts.length < 5) continue;
+                
+                if (parts[2].equals(Main.currentCustomerID) && 
+                    (parts[3].equals("Booked") || parts[3].equals("Pending"))) {
+                    try {
+                        Car car = Car.searchCar("cars.txt", parts[1]);
+                        if (car != null) {
+                            Object[] row = {
+                                parts[0],
+                                parts[1],
+                                "RM" + car.getCarPrice(),
+                                parts[3]
+                            };
+                            tableModel.addRow(row);
+                        }
+                    } catch (IOException ex) {
+                        continue;
+                    }
                 }
             }
-            
-        } catch (IOException e) {}
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(jframe,
+                "Could not load bookings: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private BookingInfo findBooking(String bookingID) throws IOException {
+        try (BufferedReader br = new BufferedReader(new FileReader("booking.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] parts = line.split(",", 5);
+                if (parts.length >= 5 && parts[0].equals(bookingID) && 
+                    parts[2].equals(Main.currentCustomerID) && 
+                    parts[3].equals("Booked")) {
+                    return new BookingInfo(parts[1], line);
+                }
+            }
+        }
+        return null;
+    }
+
+    private static class BookingInfo {
+        final String carID;
+        final String bookingLine;
+
+        BookingInfo(String carID, String bookingLine) {
+            this.carID = carID;
+            this.bookingLine = bookingLine;
+        }
     }
 
     @Override
@@ -96,54 +137,136 @@ public class CustomerBookings implements ActionListener{
         }
 
         if (e.getSource() == pay) {
-            String id = JOptionPane.showInputDialog(jframe, "Car ID to pay:");
-            if (id == null || id.isBlank()) return;  
+            String bookingID = JOptionPane.showInputDialog(jframe,
+                "Enter Booking ID:",
+                "Payment",
+                JOptionPane.QUESTION_MESSAGE);
+                
+            if (bookingID == null || bookingID.trim().isEmpty()) {
+                return;
+            }
 
             try {
-
-                Car car = Car.searchCar("cars.txt", id);
-                if (car.getStatus().equals("Booked")) {
-                    //add to sales.txt but the status got pending shud be after add to sales then considered paid dy
-                    Payment.addPayment("payment.txt", Payment.getPaymentID(), car.getCarModel(), car.getCarPrice(), car.getCarType(), car.getCarBrand(), car.getCarCategory());
-                    boolean ok = Car.updateStatus("payment.txt", id, "Pending");
-                
-
-                
-                if (ok) {
+                BookingInfo booking = findBooking(bookingID);
+                if (booking == null) {
                     JOptionPane.showMessageDialog(jframe,
-                        "Booked CarID: " + id,
-                        "Success",
-                        JOptionPane.INFORMATION_MESSAGE);
-                } 
-                
+                        "Invalid booking ID or booking not found.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-                else {
+
+                Car car = Car.searchCar("cars.txt", booking.carID);
+                if (car != null) {
+                    try {
+                        Payment.addPayment("payment.txt", 
+                            Payment.getNextPaymentID("payment.txt"), 
+                            Main.currentCustomerID,
+                            booking.carID,
+                            car.getCarPrice(), 
+                            "Pending", 
+                            LocalDateTime.now());
+                        
+                        String[] parts = booking.bookingLine.split(",", 5);
+                        String newBookingLine = parts[0] + "," + parts[1] + "," + parts[2] + ",Pending," + parts[4];
+                        
+                        java.util.List<String> lines = new java.util.ArrayList<>();
+                        try (BufferedReader br = new BufferedReader(new FileReader("booking.txt"))) {
+                            String line;
+                            while ((line = br.readLine()) != null) {
+                                if (line.equals(booking.bookingLine)) {
+                                    lines.add(newBookingLine);
+                                } else {
+                                    lines.add(line);
+                                }
+                            }
+                        }
+                        
+                        try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter("booking.txt"))) {
+                            for (String line : lines) {
+                                writer.println(line);
+                            }
+                        }
+                        
+                        JOptionPane.showMessageDialog(jframe,
+                            "Payment initiated for booking " + bookingID + "\nAmount: RM" + car.getCarPrice(),
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE);
+                        
+                        refreshTable();
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(jframe,
+                            "Could not create payment: " + ex.getMessage(),
+                            "Payment Error",
+                            JOptionPane.ERROR_MESSAGE);
+                    }
+                } else {
                     JOptionPane.showMessageDialog(jframe,
-                        "CarID not available: " + id,
-                        "Not Available",
-                        JOptionPane.WARNING_MESSAGE);
+                        "Could not find car details.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
                 }
-            }
-
-            catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(jframe,
-                    "Invalid ID format—no commas, quotes, or blanks allowed.",
-                    "Invalid Input",
-                    JOptionPane.ERROR_MESSAGE);
-            }
-
-            catch (IOException ex) {
+            } catch (IOException ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(jframe,
-                    "Could not book car. Please try again.",
+                    "Could not process payment. Please try again.",
                     "I/O Error",
                     JOptionPane.ERROR_MESSAGE);
             }
-
-            refreshTable();
         }
-           
+
+        if (e.getSource() == cancel) {
+            String bookingID = JOptionPane.showInputDialog(jframe,
+                "Enter Booking ID:",
+                "Cancel Booking",
+                JOptionPane.QUESTION_MESSAGE);
+                
+            if (bookingID == null || bookingID.trim().isEmpty()) {
+                return;
+            }
+
+            try {
+                BookingInfo booking = findBooking(bookingID);
+                if (booking == null) {
+                    JOptionPane.showMessageDialog(jframe,
+                        "Invalid booking ID or booking not found.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                boolean ok = Car.updateStatus("cars.txt", booking.carID, "Available");
+                if (ok) {
+                    java.util.List<String> lines = new java.util.ArrayList<>();
+                    try (BufferedReader br = new BufferedReader(new FileReader("booking.txt"))) {
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            if (!line.equals(booking.bookingLine)) {
+                                lines.add(line);
+                            }
+                        }
+                    }
+                    
+                    try (java.io.PrintWriter writer = new java.io.PrintWriter(new java.io.FileWriter("booking.txt"))) {
+                        for (String line : lines) {
+                            writer.println(line);
+                        }
+                    }
+
+                    JOptionPane.showMessageDialog(jframe,
+                        "Booking " + bookingID + " has been cancelled.",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE);
+                    refreshTable();
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(jframe,
+                    "Could not cancel booking. Please try again.",
+                    "I/O Error",
+                    JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
-        
 }
 
