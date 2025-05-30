@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 public class SalesmanPage implements ActionListener{
     JFrame jframe;
-    Button editProfile, viewCars, collectPayment, viewSales, logout;
+    Button editProfile, viewCars, collectPayment, viewSales, review, logout;
 
     public SalesmanPage() {
         jframe = new JFrame("Salesman Page");
@@ -20,12 +20,14 @@ public class SalesmanPage implements ActionListener{
         viewCars = new Button("All Cars");
         collectPayment = new Button("Collect Payment");
         viewSales = new Button("Sales");
+        review = new Button("Review");
         logout = new Button("Logout");
 
         editProfile.addActionListener(this);
         viewCars.addActionListener(this);
         collectPayment.addActionListener(this);
         viewSales.addActionListener(this);
+        review.addActionListener(this);
         logout.addActionListener(this);
 
         jframe.setLayout(new GridLayout(5,1,5,5));
@@ -33,6 +35,7 @@ public class SalesmanPage implements ActionListener{
         jframe.add(viewCars);
         jframe.add(collectPayment);
         jframe.add(viewSales);
+        jframe.add(review);
         jframe.add(logout);
 
         jframe.setVisible(true);
@@ -71,6 +74,10 @@ public class SalesmanPage implements ActionListener{
 
         else if (e.getSource() == viewSales) {
             new SalesmanViewSales(this);
+        }
+
+        else if (e.getSource() == review) {
+            new SalesmanViewComment(this);
         }
 
         else if (e.getSource() == logout) {

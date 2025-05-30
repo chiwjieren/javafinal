@@ -13,7 +13,7 @@ public class SalesmanCollectPayment implements ActionListener {
     private final JTable table;
     private final DefaultTableModel model;
     private final JButton btnCollect, btnBack;
-    
+
     public SalesmanCollectPayment(SalesmanPage salesmanPage) {
         frame = new JFrame("Collect Payment");
         frame.setSize(800, 500);
@@ -142,9 +142,6 @@ public class SalesmanCollectPayment implements ActionListener {
                         Main.currentSalesmanID,
                         carID,
                         now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
-                        "0",
-                        "",
-                        ""
                     ));
                 }
 

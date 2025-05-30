@@ -6,7 +6,6 @@ import javax.swing.JScrollPane;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import javax.swing.JPanel;
-import java.awt.Button;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -14,10 +13,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
-import javax.swing.*;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.ArrayList;
 import javax.swing.JButton;
 
 public class CustomerViewLuxuryCars implements ActionListener {

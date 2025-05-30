@@ -4,9 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-import java.util.ArrayList;
 import javax.swing.JButton;
 
 public class CustomerViewLocalCars implements ActionListener {

@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 
 public class CustomerPage implements ActionListener {
     JFrame jframe;
-    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, History, Logout, Bookings, editProfile;
+    Button AvailableCars, AffordableCars, LocalCars, LuxuryCars, History, Logout, Bookings, Review, editProfile;
 
     public static CustomerViewAvailableCars viewAvailableCars;
     public static CustomerBookings viewBookings;
@@ -25,6 +25,7 @@ public class CustomerPage implements ActionListener {
         History = new Button("History");
         Logout = new Button("Logout");
         Bookings = new Button("Bookings");
+        Review = new Button("Review");
         editProfile = new Button("Edit Profile");
 
         AvailableCars.addActionListener(this);
@@ -34,6 +35,7 @@ public class CustomerPage implements ActionListener {
         History.addActionListener(this);
         Logout.addActionListener(this);
         Bookings.addActionListener(this);
+        Review.addActionListener(this);
         editProfile.addActionListener(this);
 
         jframe.setLayout(new GridLayout(6,1,5,5));
@@ -44,6 +46,7 @@ public class CustomerPage implements ActionListener {
         jframe.add(History);
         jframe.add(Logout);
         jframe.add(Bookings);
+        jframe.add(Review);
         jframe.add(editProfile);
 
         jframe.setVisible(true);
@@ -84,6 +87,11 @@ public class CustomerPage implements ActionListener {
         else if (e.getSource() == Bookings) {
             viewBookings = new CustomerBookings(this);
         }
+
+        else if (e.getSource() == Review) {
+            new CustomerReview(this);
+        }
+
 
         if (e.getSource() == editProfile) {
 
